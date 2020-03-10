@@ -50,15 +50,9 @@ module.exports = {
           message.author.send(embed).then(msg => {
             message.delete();
             msg.react("⏏️").then(r => {
-              msg.react("❎");
               const importFilter = (reaction, user) =>
                 reaction.emoji.name === "⏏️" && user.id === message.author.id;
               const _import = msg.createReactionCollector(importFilter, {
-                time: 600000
-              });
-              const closeFilter = (reaction, user) =>
-                reaction.emoji.name === "❎" && user.id === message.author.id;
-              const _close = msg.createReactionCollector(closeFilter, {
                 time: 600000
               });
 
@@ -70,9 +64,6 @@ module.exports = {
                 msg.delete();
                 message.author.send(str).then(msg => {
                   msg.delete(60000);
-                });
-                _close.on("collect", r => {
-                  msg.delete();
                 });
               });
             });

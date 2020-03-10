@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const Pokedex = require("pokedex-promise-v2");
 const P = new Pokedex();
+
+
 module.exports = {
   name: "dex",
   aliases: ["search", "p"],

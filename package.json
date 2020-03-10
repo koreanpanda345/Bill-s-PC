@@ -10,11 +10,14 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@pokemon-showdown/sets": "^0.2.1",
     "airtable": "^0.8.1",
     "discord.js": "11.5.1",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
     "pokeapi": "^0.0.1",
     "pokedex-promise-v2": "^3.2.0",
+    "smogon": "^0.4.0",
     "superagent": "^5.2.2",
     "typescript": "^3.8.3"
   },
