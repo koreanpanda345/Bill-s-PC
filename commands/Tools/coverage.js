@@ -35,11 +35,12 @@ module.exports = {
   args: "<type>",
   description: "Shows coverage for a certain type.",
   category: "Tools",
+  usage: "b!coverage bug",
   execute(client, message, args) {
     if (!types.includes(args[0].toLowerCase())) return;
     P.getTypeByName(args[0].toLowerCase())
       .then(function(response) {
-        let embed = new Discord.RichEmbed();
+        let embed = new Discord.MessageEmbed();
         embed.setColor("RANDOM");
         embed.setTitle(`Coverage for ${args[0].toLowerCase()}`);
         console.log(response);

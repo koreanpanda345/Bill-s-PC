@@ -1,16 +1,72 @@
 const Discord = require("discord.js");
 const Pokedex = require("pokedex-promise-v2");
 const P = new Pokedex();
-
+const options = ["item", "ability", "move"];
 
 module.exports = {
   name: "dex",
   aliases: ["search", "p"],
   hasArgs: true,
-  args: "Pokemon name",
+  args: "<pokemon name/item/move/ability> (if item/move/ability, please enter the name of item/move/ability.)",
   description: "Displays info about a pokemon.",
   category: "Tools",
+  usage: "b!dex Mega Lopunny",
   execute(client, message, args) {
+    if(args[0] === 'item'){
+      let search = args.join(" ").slice(args[0].length + 1);
+      P.getItemByName(search.toLowerCase().replace(/ +/g, "-"))
+      .then(function(response){
+        //console.log(response);
+        let embed = new Discord.MessageEmbed();
+        embed.setColor('RANDOM')
+        embed.setTitle(`${search}`)
+        embed.setDescription(`${response.effect_entries[0].effect}`)
+        message.channel.send(embed);
+      })
+      .catch(function(err){
+        console.error(err);
+        return message.channel.send(`I couldn't find that item, maybe you spelt it wrong?`)
+      })
+    }
+    else if(args[0] === "ability"){
+      let search = args.join(" ").slice(args[0].length + 1);
+      P.getAbilityByName(search.toLowerCase().replace(/ +/g, "-"))
+      .then(function(response){
+        //console.log(response);
+        let embed = new Discord.MessageEmbed();
+        embed.setColor('RANDOM')
+        embed.setTitle(`${search}`)
+        embed.setDescription(`${response.effect_entries[0].effect}`)
+        message.channel.send(embed);
+      })
+      .catch(function(err){
+        console.error(err);
+        return message.channel.send(`I couldn't find that ability, maybe you spelt it wrong?`)
+      })
+    }
+    else if(args[0] === "move"){
+      let search = args.join(" ").slice(args[0].length + 1);
+      P.getMoveByName(search.toLowerCase().replace(/ +/g, "-"))
+      .then(function(response){
+        console.log(response);
+        let embed = new Discord.MessageEmbed();
+        embed.setColor('RANDOM')
+        embed.setTitle(`${search}`)
+        embed.setDescription(`${response.effect_entries[0].effect}`)
+        embed.addFields([
+          {name: 'Accuracy', value: response.accuracy, inline: true},
+          {name: `Base Power`, value: response.power, inline: true},
+          {name: `Damage Type`, value: response.damage_class.name, inline: true},
+          {name: "Type", value: response.type.name, inline: true}
+        ]);
+        message.channel.send(embed);
+      })
+      .catch(function(err){
+        console.error(err);
+        return message.channel.send(`I couldn't find that move, maybe you spelt it wrong?`)
+      })
+    }
+    if(!options.includes(args[0])){
     let search = "";
     if (args[0].toLowerCase() === "mega") {
       let str = args.join(" ");
@@ -19,11 +75,11 @@ module.exports = {
     } else {
       search = args[0];
     }
-    console.log(search);
+    //console.log(search);
     P.getPokemonByName(search)
       .then(function(response) {
-        console.log(response);
-        let embed = new Discord.RichEmbed();
+        //console.log(response);
+        let embed = new Discord.MessageEmbed();
         let name = response.forms[0].name;
         let url = `https://www.smogon.com/dex/sm/pokemon/${name}/`;
         //let moves = response.moves;
@@ -74,6 +130,8 @@ module.exports = {
       })
       .catch(function(err) {
         console.error(err);
+      return message.channel.send(`I couldn't find that pokemon, maybe you spelt it wrong?`)
       });
   }
+}
 };

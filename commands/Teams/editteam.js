@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const Airtable = require("airtable");
 const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base("app1XZLzoO93xWEDN");
-
+var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
 module.exports = {
   name: "editteam",
   aliases: ["et"],
@@ -10,6 +9,7 @@ module.exports = {
   args: "<team id>,<updated team>",
   description: "Allows you to update a team that is in the 'PC'",
   category: "Teams",
+  usage: "b!editteam 1,b!editTeam 1, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick`",
   execute(client, message, args) {
     let _str = args.join(" ");
     let _arglist = _str.split(",");
@@ -28,8 +28,8 @@ module.exports = {
               {
                 fields: {
                   userId: message.author.id,
-                  teamNames: arglist[0],
-                  teams: arglist[1]
+                  teamNames: _arglist[0],
+                  teams: _arglist[1]
                 }
               }
             ],

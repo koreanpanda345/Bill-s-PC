@@ -8,7 +8,9 @@ module.exports = client => {
     for (let file of commands) {
       const cmd = require(`../commands/${dirs}/${file}`);
       client.commands.set(cmd.name, cmd);
+      console.log(`Commands -> ${dirs}] ${cmd.name} was loaded`);
     }
   };
-  ["Miscellaneous", "Teams", "Tools", "Info"].forEach(x => load(x));
+
+  ["Info", "Miscellaneous", "Settings", "Teams", "Tools"].forEach(x => load(x));
 };
