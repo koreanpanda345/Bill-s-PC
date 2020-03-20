@@ -8,6 +8,7 @@ module.exports = {
   args: "<Pokemon name>",
   description: "shows all the moves that the pokemon can learn.",
   category: "Tools",
+  usage: "b!movelist lopunny",
   execute(client, message, args) {
     let search = "";
     if (args[0].toLowerCase() === "mega") {
@@ -21,7 +22,7 @@ module.exports = {
     P.getPokemonByName(search)
       .then(function(response) {
         console.log(response);
-        let embed = new Discord.RichEmbed();
+        let embed = new Discord.MessageEmbed();
         embed.setColor("RANDOM");
         let str = "";
         for (let i = 0; i < response.moves.length; i++) {

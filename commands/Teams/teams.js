@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const Airtable = require("airtable");
 const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base("app1XZLzoO93xWEDN");
-
+var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
 module.exports = {
   name: "teams",
   description: "Displays all of your teams.",
@@ -37,7 +36,7 @@ module.exports = {
         for (let i = 0; i < nameArr.length; i++) {
           str += `${i + 1} - ${nameArr[i]}\n`;
         }
-        let teamEmbed = new Discord.RichEmbed();
+        let teamEmbed = new Discord.MessageEmbed();
         teamEmbed.setColor("RANDOM");
         teamEmbed.setTitle(`${message.author.username}'s teams'`);
         teamEmbed.setDescription(str);

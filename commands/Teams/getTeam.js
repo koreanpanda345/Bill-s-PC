@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const Airtable = require("airtable");
 const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base("app1XZLzoO93xWEDN");
-
+var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
 module.exports = {
   name: "getteam",
   aliases: ["gt"],
@@ -10,6 +9,7 @@ module.exports = {
   args: "<team id>",
   description: "Gets a team with the team's id",
   category: "Teams",
+  usage: "b!getteam 1",
   execute(client, message, args) {
     base("Teams")
       .select({
@@ -25,10 +25,8 @@ module.exports = {
         let sendArr = [];
         let teamNames = "";
         let teams = "";
-        let _recordId = "";
         let visible = "";
         records.forEach(function(record) {
-          _recordId = record.getId();
           teamNames = record.get("teamNames");
           teams = record.get("teams");
           visible = record.get("visibility");
@@ -42,7 +40,7 @@ module.exports = {
             sendArr.push(visible.split(",")[i]);
           }
         });
-        let embed = new Discord.RichEmbed();
+        let embed = new Discord.MessageEmbed();
         embed.setColor("RANDOM");
         embed.setTitle(`${nameArr[args[0] - 1]}`);
         embed.setDescription(`${teamArr[args[0] - 1]}`);
@@ -56,14 +54,14 @@ module.exports = {
                 time: 600000
               });
 
-              msg.delete(60000);
+              msg.delete({timeout: 60000});
               _import.on("collect", r => {
                 let str = `***${nameArr[args[0] - 1]}***\n\`\`\`${
                   teamArr[args[0] - 1]
                 }\`\`\``;
                 msg.delete();
                 message.author.send(str).then(msg => {
-                  msg.delete(60000);
+                  msg.delete({timeout: 60000});
                 });
               });
             });
@@ -73,7 +71,7 @@ module.exports = {
             message.delete();
             msg.react("⏏️").then(r => {
               msg.react("❎");
-              msg.delete(60000);
+              msg.delete({timeout: 60000});
               const importFilter = (reaction, user) =>
                 reaction.emoji.name === "⏏️" && user.id === message.author.id;
               const _import = msg.createReactionCollector(importFilter, {
@@ -91,7 +89,7 @@ module.exports = {
                 }\`\`\``;
                 msg.delete();
                 message.channel.send(str).then(msg => {
-                  msg.delete(60000);
+                  msg.delete({timeout: 60000});
                 });
               });
               _close.on("collect", r => {

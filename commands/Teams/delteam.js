@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const Airtable = require("airtable");
 const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base("app1XZLzoO93xWEDN");
-
+var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
 module.exports = {
   name: "delteam",
   aliases: ["dt"],
@@ -10,6 +9,7 @@ module.exports = {
   args: "<team id>",
   description: "Deletes a team from your 'PC'",
   category: "Teams",
+  usage: "b!delteam 1",
   execute(client, message, args) {
     base("Teams")
       .select({

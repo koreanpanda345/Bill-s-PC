@@ -1,24 +1,24 @@
-const {RichEmbed} = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 const prefix = process.env.PREFIX;
 const {readdirSync} = require('fs');
 
 module.exports = {
     name: 'help',
     aliases: ["command", "commands"],
-    category: "Miscellaneous",
+    category: "Info",
     description: "List all of my commands or info about a specific command.",
     usage: "(command name)",
     execute(client, message, args){
-        const embed = new RichEmbed();
+        const embed = new MessageEmbed();
         embed.setColor('RANDOM');
         embed.setAuthor(`${message.guild.me.displayName}'s Help`, message.guild.iconURL);
         embed.setThumbnail(client.user.displayAvatarURL);
 
         if(!args[0]){
             const categories = readdirSync(`./commands/`);
-            embed.setDescription(`These are the avaliable commands for ${message.guild.me.displayName}\nThe bot prefix is: **${prefix}**`);
-            embed.setFooter(`${message.guild.me.displayName} | Total Commands: ${client.commands.size}`, client.user.displayAvatarURL);
-
+            embed.setDescription(`These are the avaliable commands for ${message.guild.me.displayName}`);
+            embed.setFooter(`${message.guild.me.displayName} | Total Commands: ${client.commands.size}`);
+            embed.setThumbnail(client.user.displayAvatarURL({format: 'jpg'}));
             categories.forEach(category => {
                 const dir = client.commands.filter(c => c.category === category);
                 const capitalise = category.slice(0, 1).toUpperCase() + category.slice(1);
@@ -41,7 +41,7 @@ module.exports = {
             \n
             *<> means that it is required, () means it's optional*
             `);
-            embed.setFooter(`${message.guild.me.displayName}`, client.user.displayAvatarURL);
+            embed.setFooter(`${message.guild.me.displayName}`, client.user.displayAvatarURL({format: 'jpg'}));
 
             return message.channel.send(embed);
         }

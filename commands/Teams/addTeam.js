@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const Airtable = require("airtable");
 const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base("app1XZLzoO93xWEDN");
+var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
 module.exports = {
   name: "addteam",
   aliases: ["at"],
@@ -9,6 +9,7 @@ module.exports = {
   args: "<team name>,<team>,(dm/public)",
   description: "Allows you to add a team to the PC.",
   category: "Teams",
+  usage: "`b!addTeam Best Bunny, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick,dm`",
   execute(client, message, args) {
     let str = args.join(" ");
     let arglist = str.split(",");
