@@ -43,6 +43,6 @@ So King Wolf(Wolf) and DragonOfSmite(Dragon) are the OGs that Founded iG Pokefin
 as a whole. First thing, I am grateful that Wolf and Dragon allowed me to bring my bot into their server to Introduce it Comp Players, so I can see it an enviroment that I could never create on my owm.
 But the server did a lot for me. The server taught me the pokemon game mechanics, and a lot about competivite pokemon. Yea sure that doesn't need to be used to make Bill's PC, but the fact that I have
 This knowledge, I can make this work for anyone, and make it where it will help newer people have a easier time with competivite pokemon. So I want to thank them, and Leave a link to their server, cause 
-They are one of the nices people I ever meet.
+They are one of the nicest people I ever meet.
 
 Link to their server: https://discord.gg/TFMtRtJ
