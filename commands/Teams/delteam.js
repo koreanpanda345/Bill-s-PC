@@ -25,27 +25,37 @@ module.exports = {
         let teamNames = "";
         let teams = "";
         let _recordId = "";
+      let vis = "";
+      let visArr = [];
         records.forEach(function(record) {
           _recordId = record.getId();
           teamNames = record.get("teamNames");
           teams = record.get("teams");
-          for (let i = 0; i < teamNames.split(",").length; i++) {
-            nameArr.push(teamNames.split(",")[i]);
+          vis = record.get('visibility');
+          for (let i = 0; i < teamNames.split(", ").length; i++) {
+            nameArr.push(teamNames.split(", ")[i]);
           }
-          for (let i = 0; i < teams.split(",").length; i++) {
-            teamArr.push(teams.split(",")[i]);
+          for (let i = 0; i < teams.split(" , ").length; i++) {
+            teamArr.push(teams.split(" , ")[i]);
+          }
+          for(let i = 0; i < vis.split(" , ").length; i++){
+            visArr.push(vis.split(" , ")[i]);
           }
         });
         let oldName = nameArr[args[0] - 1];
-        nameArr.splice(args[0] - 1, args[0] - 1);
-        teamArr.splice(args[0] - 1, args[0] - 1);
-        base("Teams").update(
+      let removeName = nameArr[args[0] - 1];
+      let removeTeam = teamArr[args[0] - 1];
+      let removeVis = visArr[args[0] - 1];
+      teams.replace(removeTeam, '');
+      teamNames.replace(removeName, '');
+      vis.replace(removeVis, '');
+      base("Teams").update(
           [
             {
               id: _recordId,
               fields: {
-                teamNames: nameArr.toString(),
-                teams: teamArr.toString()
+                teamNames: teamNames,
+                teams: teams
               }
             }
           ],
