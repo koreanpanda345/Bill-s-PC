@@ -7,7 +7,7 @@ const endpoint_items = process.env.SDITEMS_ENDPOINT;
 const endpoint_moves = process.env.SDMOVES_ENDPOINT;
 const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const endpoint_ability = process.env.SDABILITY_ENDPOINT;
-
+const endpoint_sprites = process.env.SDSPRITES_ENDPOINT;
 const typeColor = require('./../../Util/TypeColor');
 module.exports = {
   name: "dex",
@@ -135,7 +135,7 @@ module.exports = {
               embed.addField(`Evolves From`, poke.prevo, true);
           if(poke.evo)
               embed.addField(`Evolves Into`, poke.evo[0], true);
-              let sprite = `https://play.pokemonshowdown.com/sprites/ani/${poke.name.toLowerCase()}.gif`;
+          let sprite = `${endpoint_sprites}${poke.name.toLowerCase()}.gif`;
           embed.setImage(sprite);
           if(poke.otherFormes)
           embed.addField("Other Forms", poke.otherFormes.toString().replace(/,+/g, ", "), true);

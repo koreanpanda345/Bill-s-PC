@@ -124,7 +124,7 @@ module.exports = {
                     embed.addField(`Evolves From`, poke.prevo);
                 if(poke.evo)
                     embed.addField(`Evolves Into`, poke.evo[0]);
-                let sprite = `https://play.pokemonshowdown.com/sprites/ani/${search}.gif`;
+                let sprite = `${process.env.SDSPRITES_ENDPOINT}${search}.gif`;
                 embed.setImage(sprite);
                 message.channel.send(embed);
             
