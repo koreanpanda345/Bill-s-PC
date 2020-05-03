@@ -32,30 +32,33 @@ module.exports = {
           teamNames = record.get("teamNames");
           teams = record.get("teams");
           vis = record.get('visibility');
-          for (let i = 0; i < teamNames.split(", ").length; i++) {
-            nameArr.push(teamNames.split(", ")[i]);
+          for (let i = 0; i < teamNames.split(",").length; i++) {
+            nameArr.push(teamNames.split(",")[i]);
           }
-          for (let i = 0; i < teams.split(" , ").length; i++) {
-            teamArr.push(teams.split(" , ")[i]);
+          for (let i = 0; i < teams.split(",").length; i++) {
+            teamArr.push(teams.split(",")[i]);
           }
-          for(let i = 0; i < vis.split(" , ").length; i++){
-            visArr.push(vis.split(" , ")[i]);
+          for(let i = 0; i < vis.split(",").length; i++){
+            visArr.push(vis.split(",")[i]);
           }
         });
         let oldName = nameArr[args[0] - 1];
-      let removeName = nameArr[args[0] - 1];
-      let removeTeam = teamArr[args[0] - 1];
-      let removeVis = visArr[args[0] - 1];
-      teams.replace(removeTeam, '');
-      teamNames.replace(removeName, '');
-      vis.replace(removeVis, '');
+        console.log(oldName);
+      nameArr.splice(args[0] - 1, 1);
+      teamArr.splice(args[0] - 1, 1);
+      visArr.splice(args[0] - 1, 1);
+      teamNames = nameArr.toString();
+      teams = teamArr.toString();
+      vis = visArr.toString();
+      console.log(teamNames);
       base("Teams").update(
           [
             {
               id: _recordId,
               fields: {
                 teamNames: teamNames,
-                teams: teams
+                teams: teams,
+                visibility: vis
               }
             }
           ],

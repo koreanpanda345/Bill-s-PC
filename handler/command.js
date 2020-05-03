@@ -12,5 +12,5 @@ module.exports = client => {
     }
   };
 
-  ["Info", "Miscellaneous", "Settings", "Teams", "Tools"].forEach(x => load(x));
+  ["Dev","Info", "Miscellaneous", "Settings", "Teams", "Tools"].forEach(x => load(x));
 };
