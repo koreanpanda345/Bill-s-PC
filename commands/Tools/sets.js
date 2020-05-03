@@ -31,6 +31,7 @@ module.exports = {
     if (format.toLowerCase() === "natdex") format = "nationaldex";
     else if (format.toLowerCase() === "natdexag") format = "nationaldexag";
     let json;
+    console.log(`gen${gen} | ${format} | ${name}`);
     fetch(`${endpoint}gen${gen}${format}.json`)
       .then(res => res.text())
       .catch(error => {return console.log(error)})
@@ -53,24 +54,24 @@ module.exports = {
         });
         for (let i = 0; i < setArr.length; i++) {
           let set = json.smogon[`${name}`][setArr[i]];
-          let evs = `${set.evs.hp !== undefined ? ` ${set.evs.hp} HP/` : ``}${
-            set.evs.atk !== undefined ? ` ${set.evs.atk} Atk/` : ``
-          }${set.evs.def !== undefined ? ` ${set.evs.def} Def/` : ``}${
-            set.evs.spa !== undefined ? ` ${set.evs.spa} SpA/` : ``
-          }${set.evs.spd !== undefined ? ` ${set.evs.spd} SpD/` : ``}${
-            set.evs.spe !== undefined ? ` ${set.evs.spe} Spe/` : ``
+          let evs = `${set.evs.hp !== undefined ? ` ${set.evs.hp} HP /` : ``}${
+            set.evs.atk !== undefined ? ` ${set.evs.atk} Atk /` : ``
+          }${set.evs.def !== undefined ? ` ${set.evs.def} Def /` : ``}${
+            set.evs.spa !== undefined ? ` ${set.evs.spa} SpA /` : ``
+          }${set.evs.spd !== undefined ? ` ${set.evs.spd} SpD /` : ``}${
+            set.evs.spe !== undefined ? ` ${set.evs.spe} Spe /` : ``
           }`;
           let ivs;
           embed.setTitle(`Gen ${gen} ${format} set for ${name}`);
           if (set.ivs !== undefined)
-            ivs = `${set.ivs.hp !== undefined ? ` ${set.ivs.hp} HP/` : ``}${
-              set.ivs.atk !== undefined ? ` ${set.ivs.atk} Atk/` : ``
-            }${set.ivs.def !== undefined ? ` ${set.ivs.def} Def/` : ``}${
-              set.ivs.spa !== undefined ? ` ${set.ivs.spa} SpA/` : ``
-            }${set.ivs.spd !== undefined ? ` ${set.ivs.spd} SpD/` : ``}${
-              set.ivs.spe !== undefined ? ` ${set.evs.spe} Spe/` : ``
+            ivs = `${set.ivs.hp !== undefined ? ` ${set.ivs.hp} HP /` : ``}${
+              set.ivs.atk !== undefined ? ` ${set.ivs.atk} Atk /` : ``
+            }${set.ivs.def !== undefined ? ` ${set.ivs.def} Def /` : ``}${
+              set.ivs.spa !== undefined ? ` ${set.ivs.spa} SpA /` : ``
+            }${set.ivs.spd !== undefined ? ` ${set.ivs.spd} SpD /` : ``}${
+              set.ivs.spe !== undefined ? ` ${set.evs.spe} Spe /` : ``
             }`;
-            _set =  `\`\`\`${name} @ ${set.item}\nAbility: ${set.ability}\nEvs:${evs.substr(0, evs.length - 1)}${set.ivs === undefined ? `` : `\n${ivs.substr(0, ivs.length - 1)}`}\n${set.nature} Nature\n- ${set.moves[0]}\n- ${set.moves[1]}\n- ${set.moves[2]}\n- ${set.moves[3]}\`\`\``
+            _set =  `\`\`\`${name} @ ${set.item}\nAbility: ${set.ability}\nEVs:${evs.substr(0, evs.length - 1)}${set.ivs === undefined ? `` : `\nIVs: ${ivs.substr(0, ivs.length - 1)}`}\n${set.nature} Nature\n- ${set.moves[0]}\n- ${set.moves[1]}\n- ${set.moves[2]}\n- ${set.moves[3]}\`\`\``
           embed.addField(
             `${setArr[i]}`,
            _set
