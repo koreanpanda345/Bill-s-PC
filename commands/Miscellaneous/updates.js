@@ -14,6 +14,7 @@ module.exports = {
             let cmdAddedArr = [];
             let cmdUpdatedArr = [];
             let futureUpdateArr = [];
+            let imgArr = [];
             records.forEach(function(record){
                 dateArr.push(record.get("Date"));
                 titleArr.push(record.get("Title"));
@@ -21,6 +22,7 @@ module.exports = {
                 cmdAddedArr.push(record.get("Commands Added"));
                 cmdUpdatedArr.push(record.get("Commands Updated"));
                 futureUpdateArr.push(record.get("Future Update"));
+                imgArr.push(record.get('Image'));
             });
 
             if(!args[0]){
@@ -104,7 +106,8 @@ module.exports = {
                     embed.addField(`Commands Updated:`, cmdUpdatedArr[select]);
                 if(futureUpdateArr[select] !== "\n")
                     embed.addField(`Future Updates:`, futureUpdateArr[select]);
-
+                if(imgArr[select] !== "\n")
+                    embed.setImage(imgArr[select][0].thumbnails.large.url);
                 return message.channel.send(embed);
             }
         })
