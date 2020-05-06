@@ -1,5 +1,9 @@
 dependencies:
+  '@pkmn/calc': 0.0.1
+  '@pkmn/dex': 0.0.1
+  '@pkmn/sets': 0.0.2
   '@pokemon-showdown/sets': 0.3.1
+  '@smogon/calc': 0.3.0
   airtable: 0.8.1
   ascii-table: 0.0.9
   discord.js: 12.1.1
@@ -18,14 +22,56 @@ packages:
     dev: false
     resolution:
       integrity: sha512-CU1q0UXQUpFNzNB7gufgoisDHP7n+T3tkqTsp3MNUkVJ5+hS3BCvME8uCXAUFlz+6T2FbTCu75A+yQ7HMKqRKw==
+  /@pkmn/calc/0.0.1:
+    dependencies:
+      '@pkmn/types': 0.1.0
+      '@smogon/calc': 0.3.0
+    dev: false
+    resolution:
+      integrity: sha512-LFh4B8zSzBhtdhADINQy1X75Z6gKjWepP+E5fvSXQClKlywrfkR6DfZV6rNu25BOjui+/8cNaXneSJXnYTECRw==
+  /@pkmn/dex-types/0.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-sc0vAFkN3PIfwKOjnudJMNCtL2nAuWCzAMLdtnLza5HpHkDKF2b6sG11sXdC5KygZ/vxOZOLE2zxx/D6TgXHvQ==
+  /@pkmn/dex/0.0.1:
+    dependencies:
+      '@pkmn/dex-types': 0.0.1
+      '@pkmn/types': 0.1.0
+    dev: false
+    resolution:
+      integrity: sha512-l+rF22lXIqU25vtcRN+Zunu0sKU/InOUD+cQSQCRX0zdjm85ZwcItbthp95CCJo+kH4d+5ygN9QYwQ6Ap0/7eQ==
+  /@pkmn/sets/0.0.2:
+    dependencies:
+      '@pkmn/types': 0.0.2
+    dev: false
+    resolution:
+      integrity: sha512-IYSly/AciHy/ffx/mh8PZUSLC082FJK0cTxRIYdi8fKcj/SGd4DPrzBBszwy5X6NKxokYj6VcgSVFIb2Ghvplw==
+  /@pkmn/types/0.0.2:
+    dev: false
+    resolution:
+      integrity: sha512-3OU+Srxl2876DYQ6WBsPM+tSi03w/DUg3lC2fscvZCFntW/eDY988OdouPiURtuZajq9WVddItgHCwRXWVhzsA==
+  /@pkmn/types/0.1.0:
+    dev: false
+    resolution:
+      integrity: sha512-GKEf4jKjq2tMZ9KjTagW/stO5LSl9ruNPmUfxGeUUqLcyQcRDimNHKEvrscTBSItgts25JNpK30FBva7Rft4yg==
   /@pokemon-showdown/sets/0.3.1:
     dev: false
     resolution:
       integrity: sha512-1xFEDSY1jD94FGIndWO+kCN7qmyXcM8xJJnFQDFZy2dK4VikxtIMKeXP+BqipElCNHkhEGof9AI7No7id4oaOg==
+  /@smogon/calc/0.3.0:
+    dependencies:
+      '@types/node': 13.13.5
+    dev: false
+    resolution:
+      integrity: sha512-tSIsfMLJABG7L3HaTOyUf9/CXWHjKxXIu4ZAP9tNNf6zozYzJbGXV1f8fFzJkTR5lsSaf3D4gjqXrbwm4jfHjA==
   /@types/node/13.11.1:
     dev: false
     resolution:
       integrity: sha512-eWQGP3qtxwL8FGneRrC5DwrJLGN4/dH1clNTuLfN81HCrxVtxRjygDTUoZJ5ASlDEeo0ppYFQjQIlXhtXpOn6g==
+  /@types/node/13.13.5:
+    dev: false
+    resolution:
+      integrity: sha512-3ySmiBYJPqgjiHA7oEaIo2Rzz0HrOZ7yrNO5HWyaE5q0lQ3BppDZ3N53Miz8bw2I7gh1/zir2MGVZBvpb1zq9g==
   /abort-controller/3.0.0:
     dependencies:
       event-target-shim: 5.0.1
@@ -1092,7 +1138,11 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
+  '@pkmn/calc': ^0.0.1
+  '@pkmn/dex': ^0.0.1
+  '@pkmn/sets': ^0.0.2
   '@pokemon-showdown/sets': ^0.3.1
+  '@smogon/calc': ^0.3.0
   airtable: ^0.8.1
   ascii-table: ^0.0.9
   discord.js: ^12.1.1

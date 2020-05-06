@@ -13,6 +13,13 @@ module.exports = {
   execute(client, message, args) {
     let str = args.join(" ");
     let arglist = str.split(",");
+    let count = arglist.length;
+    for(let i = 0; i < count; i++){
+      if(arglist[i].startsWith(" ")){
+        let _str = arglist[i].replace(" ", "");
+        arglist[i] = _str;
+      }
+    }
     if (!arglist)
       return message.channel.send(
         "Please try again, but provide the command with your team name, and your team in text form with ',' between the team name and your team.example: `b!addTeam Best Bunny, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick`"
@@ -23,7 +30,7 @@ module.exports = {
       })
       .eachPage(function page(records, fetchNextPage) {
         if (!records.length) {
-          base("Teams").create(
+           return base("Teams").create(
             [
               {
                 fields: {

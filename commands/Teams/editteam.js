@@ -11,7 +11,16 @@ module.exports = {
   category: "Teams",
   usage: "b!editTeam 1, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick`",
   execute(client, message, args) {
-  
+    let str = args.join(" ");
+    let _arglist = str.split(",");
+    let count = _arglist.length;
+    for(let i = 0; i < count; i++){
+      if(_arglist[i].startsWith(" ")){
+        let _str = _arglist[i].replace(" ", "");
+        _arglist[i] = _str;
+      }
+    }
+    console.log(_arglist);
     if (!_arglist)
       return message.channel.send(
         "Please try again, but provide the command with your team's id, and your team in text form with ',' between the team name and your team.example: `b!editTeam 1, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick`"

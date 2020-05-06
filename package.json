@@ -10,7 +10,11 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@pkmn/calc": "^0.0.1",
+    "@pkmn/dex": "^0.0.1",
+    "@pkmn/sets": "^0.0.2",
     "@pokemon-showdown/sets": "^0.3.1",
+    "@smogon/calc": "^0.3.0",
     "airtable": "^0.8.1",
     "ascii-table": "^0.0.9",
     "discord.js": "^12.1.1",
