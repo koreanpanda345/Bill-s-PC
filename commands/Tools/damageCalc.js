@@ -1,5 +1,4 @@
 const {Sets} = require("@pkmn/sets");
-const fetch = require('node-fetch');
 const {Generations} = require('@pkmn/calc');
 const {Dex} = require('@pkmn/dex');
 const {calculate, Pokemon, Move} = require('@smogon/calc');

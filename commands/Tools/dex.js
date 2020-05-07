@@ -1,6 +1,4 @@
 const Discord = require("discord.js");
-const Pokedex = require("pokedex-promise-v2");
-const P = new Pokedex();
 const options = ["item", "ability", "move"];
 const fetch = require('node-fetch');
 const endpoint_items = process.env.SDITEMS_ENDPOINT;
