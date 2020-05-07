@@ -46,3 +46,5 @@ This knowledge, I can make this work for anyone, and make it where it will help 
 They are one of the nices people I ever meet.
 
 Link to their server: https://discord.gg/TFMtRtJ
+
+[Link to the Official Server](https://discord.gg/uhMbRMa)

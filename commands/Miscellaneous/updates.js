@@ -106,7 +106,7 @@ module.exports = {
                     embed.addField(`Commands Updated:`, cmdUpdatedArr[select]);
                 if(futureUpdateArr[select] !== "\n")
                     embed.addField(`Future Updates:`, futureUpdateArr[select]);
-                if(imgArr[select] !== "\n")
+                if(imgArr[select] !== (undefined))
                     embed.setImage(imgArr[select][0].thumbnails.large.url);
                 return message.channel.send(embed);
             }
