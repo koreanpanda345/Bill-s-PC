@@ -1,7 +1,7 @@
 const {Sets} = require("@pkmn/sets");
-const {Generations} = require('@pkmn/calc');
+const {Generations} = require('@pkmn/data');
 const {Dex} = require('@pkmn/dex');
-const {calculate, Pokemon, Move} = require('@smogon/calc');
+const {Pokemon} = require('@smogon/calc');
 const {MessageEmbed} = require('discord.js');
 
 module.exports = {
