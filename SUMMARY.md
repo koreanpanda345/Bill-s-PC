@@ -4,11 +4,11 @@
 
 ## Commands
 
-* [LICENSE](license/README.md)
-  * [List of Commands](license/list-of-commands.md)
+* [LICENSE](commands/license/README.md)
+  * [List of Commands](commands/license/list-of-commands.md)
+* [Change Logs](untitled.md)
 
 ## Credits
 
 * [Credits](credits/credits.md)
-* [Change Logs](untitled.md)
 

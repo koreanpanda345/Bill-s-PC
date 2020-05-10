@@ -8,8 +8,6 @@ What is Bill's PC? rather the main question is what is on it? That's something w
 
 ## What is Bill's PC?
 
-
-
 I mean that's a question that we all have. what is it, or what is on it? But the answer is simple. it's a discord bot. but not just any discord bot. A discord bot design to make Competivite pokemon so much easier. You maybe wondering, "How?". And the answer is simple as well, the best feature it has, is the ability to store your teams into the "PC", that will stay they no matter what. So no more losing your teams, when showdown decides to delete your teams. Sounds cool right?
 
 ## Why did you make Bill's PC
@@ -20,28 +18,27 @@ This might be a question, and it might not be, but explaining it, might help you
 
 This question may sound like I am promoting myself, but the truth is, I am but in a different way. I do things my own way, and I like doing them. But the things I do differently:
 
-* I listen to what people have to say. 
+* I listen to what people have to say.
 
-    Yes other people do this, but I listen to everyone. If you have a suggestion, I want to hear it. No matter if it is stupid or not, I want to hear it.
+  Yes other people do this, but I listen to everyone. If you have a suggestion, I want to hear it. No matter if it is stupid or not, I want to hear it.
 
 * I do not ask for money, nor do I expect donations.
 
-    This is something me personally have a strong feeling about doing. My belif is that you donate cause you like the bot. You are showing you support by allowing it to continue being run.
+  This is something me personally have a strong feeling about doing. My belif is that you donate cause you like the bot. You are showing you support by allowing it to continue being run.
 
-    100% of the donation The bot gets, will 100% be for the bot, I do not use any of it for my personal gain. It feels wrong for me to do this, so I don't do it.
+  100% of the donation The bot gets, will 100% be for the bot, I do not use any of it for my personal gain. It feels wrong for me to do this, so I don't do it.
 
 * Interaction with the community
 
-    This is something that others do, but like this is important to me. I chose to interact with people. I enjoy talking to people, and learning stuff from people. To me, it's why I chose to make this.
+  This is something that others do, but like this is important to me. I chose to interact with people. I enjoy talking to people, and learning stuff from people. To me, it's why I chose to make this.
 
 * I Give Credit.
 
-    This is something I don't see a lot. I will always give people credit. To me, it's something that just feels right, and makes it seem like I did all this by myself, cause I obivous didn't.
+  This is something I don't see a lot. I will always give people credit. To me, it's something that just feels right, and makes it seem like I did all this by myself, cause I obivous didn't.
 
 ## Do you have a suggestion?
 
 You have a suggestion OWO, prefect, I would to hear it. please click on this link: [https://airtable.com/shrngOqSUiugLNSLK](https://airtable.com/shrngOqSUiugLNSLK) and fill out the form. It will talk me a day or 2 to get to it, as I can be busy with life, or implementing something new on Bill's PC.
-
 
 [Link to the Official Server](https://discord.gg/uhMbRMa)
 
