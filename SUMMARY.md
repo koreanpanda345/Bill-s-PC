@@ -11,4 +11,6 @@
 ## Credits
 
 * [Credits](credits/credits.md)
+* [Suggestions](https://airtable.com/shrngOqSUiugLNSLK)
+* [Bugs](https://airtable.com/shrn5D5nx549xW2L1)
 
