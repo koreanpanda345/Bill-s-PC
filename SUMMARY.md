@@ -4,9 +4,9 @@
 
 ## Commands
 
-* [LICENSE](commands/license/README.md)
-  * [List of Commands](commands/license/list-of-commands.md)
-* [Team Commands](team-commands.md)
+* [List of Commands](commands/list-of-commands.md)
+* [Team Commands](commands/team-commands.md)
+* [LICENSE](commands/license.md)
 * [Change Logs](untitled.md)
 
 ## Credits
