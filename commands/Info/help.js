@@ -1,4 +1,4 @@
-const {MessageEmbed} = require('discord.js');
+ const {MessageEmbed} = require('discord.js');
 const prefix = process.env.PREFIX;
 const {readdirSync} = require('fs');
 
@@ -26,7 +26,6 @@ module.exports = {
                 try{
                     embed.addField(`>${capitalise} [${dir.size}]:`, dir.map(c => `\`${c.name}\``).join(" "));
                 } catch(e){
-                    console.error(e);
                 }
             });
             return message.channel.send(embed);
