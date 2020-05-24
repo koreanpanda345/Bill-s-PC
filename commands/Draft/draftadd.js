@@ -14,6 +14,7 @@ module.exports = {
     description: "Adds a draft plan to your Person Collection of draft plans.",
     execute(client, message, args){
         let embed = new MessageEmbed();
+        embed.setColor('RANDOM');
         embed.setTitle(`Untitled`);
         embed.setDescription(
           `Please Type in what you would like your draft plan's name to be.`
@@ -30,40 +31,8 @@ module.exports = {
             let _name = m.content;
             m.delete();
             embed
-              .setTitle(`${_name}`)
-              .setDescription(
-                `Please list the Draft format you are using.\n- Point Draft\n- Tier Draft`
-              );
-            msg.edit(embed);
-  
-            let draft = message.channel.createMessageCollector(filter, {
-              time: 86400000,
-              max: 1,
-            });
-            let pointsResponse = ["points", "points draft", "point", "pd", "p"];
-            let tierResponse = ["tiers", "tiers draft", "tier", "td", "t"];
-            draft.on("collect", (m) => {
-              console.log(m.content);
+              .setTitle(`${_name}`);
               let _draft;
-              if (pointsResponse.includes(m.content.toLowerCase())) {
-                _draft = "point";
-                m.delete();
-                embed.setDescription(
-                  `Point Draft\nPlease enter the amount of points you are starting off with.`
-                );
-                msg.edit(embed);
-                let points = message.channel.createMessageCollector(filter, {
-                  time: 86400000,
-                  max: 1,
-                });
-                points.on("collect", (m) => {
-                  let _points = m.content;
-                  embed.setDescription(
-                    `Points Draft\nPoints: ${_points}\n please enter the amount of pokemon you can select.`
-                  );
-                  msg.edit(embed);
-                });
-              } else if (tierResponse.includes(m.content.toLowerCase())) {
                 //tier 1, tier 2, tier 3, tier 3, tier 4, tier 5, mega, free, free, free, free\
                 base("Draft plans")
                   .select({
@@ -89,7 +58,6 @@ module.exports = {
                     }
                   });
                 _draft = "tier";
-                m.delete();
                 embed.setDescription(
                   `Tier Draft
                   Please enter the tier system that you will be using.
@@ -118,8 +86,6 @@ module.exports = {
   
                   }
   
-                  console.log(_tiers);
-  
                   m.delete();
                   for (let i = 0; i < _tiers.length; i++) {
                     embed.addField(
@@ -146,12 +112,10 @@ module.exports = {
                       if(!_pick) return;
                       m.delete();
                       _pick = _pick.replace(/ +/g, "");
-                      console.log(_pick);
                       let search = _pick.toLowerCase();
                       if (search.toLowerCase().includes("mega")) {
                         let temp = search.replace("mega", "");
                         search = temp + "mega";
-                        console.log(search);
                       }
                       fetch(`${endpoint_dex}`)
                         .then((res) => res.text())
@@ -159,10 +123,8 @@ module.exports = {
                         .then((body) => {
                           let res = eval(body);
                           let poke = res[search];
-                          console.log(poke);
                           let abilities;
                           let ab = Object.values(poke.abilities);
-                          console.log(ab);
                           for(let i = 0; i < ab.length; i++){
                               abilities += `- ${ab[i]}\n`;
                           }
@@ -191,7 +153,6 @@ module.exports = {
                         slots: embed.fields,
                         userId: message.author.id,
                       };
-                      console.log(draft);
                       let plan = "";
                       for (let i = 0; i < embed.fields.length; i++) {
                         plan += `${embed.fields[i].name}</> ${embed.fields[i].value}<>`;
@@ -202,7 +163,6 @@ module.exports = {
                           filterByFormula: `{usersId} = ${draft.userId}`,
                         })
                         .eachPage((records, _) => {
-                          console.log(records);
                           let _record;
                           let _names;
                           let _plans;
@@ -235,7 +195,6 @@ module.exports = {
                             ],
                             (err, records) => {
                               if (err) return console.error(err);
-                              console.log(`Saved draft plan.`);
                               message.delete();
                               msg.delete();
                               m.delete();
@@ -258,9 +217,7 @@ module.exports = {
                     }
                   });
                 });
-              }
+              })
             });
-          });
-        });
     }
 }

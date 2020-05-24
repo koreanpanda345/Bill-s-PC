@@ -12,6 +12,30 @@ module.exports = {
     description: "displays the list of drafts you made.",
     category: "Draft",
     execute(client, message, args){
+      if(args[0]){
+        switch(args[0]){
+          case "add":
+            args.shift();
+            require("./draftadd.js").execute(client, message, args);
+          break;
+          case "view":
+          args.shift();
+          require('./draftplans.js').execute(client, message, args);
+          break;
+          case "edit":
+          args.shift();
+          require("./draftedit.js").execute(client, message, args);
+          break;
+          case "delete":
+          args.shift();
+          require("./draftdelete.js").execute(client, message, args);
+          break;
+          default:
+          require('./draftplans.js').execute(client, message, args);
+          break;
+        }
+        return;
+      }
         base(`Draft plans`)
         .select({
           filterByFormula: `{usersId} = ${message.author.id}`,
@@ -29,7 +53,6 @@ module.exports = {
             _draftName = record.get("draftname");
             _draftPlan = record.get("draftplans");
           });
-          console.log(_draftName);
           for (let i = 0; i < _draftName.split(",").length; i++) {
             draftName.push(_draftName.split(",")[i]);
           }
@@ -38,6 +61,8 @@ module.exports = {
           }
 
           let embed = new MessageEmbed();
+          embed.setColor('RANDOM');
+
           let desc = "";
 
           for (let i = 0; i < draftName.length; i++) {
