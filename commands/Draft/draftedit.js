@@ -47,6 +47,7 @@ module.exports = {
             draftType.push(_draftType.split(",")[i]);
           }
           let embed = new MessageEmbed();
+          embed.setColor('RANDOM');
           embed.setTitle(draftName[num - 1]);
           embed.setDescription(draftType[num - 1] + "Please enter the slot number and the pokemon in this format `number, pokemon`.\nexample: `3, lopunny`");
           for (let i = 0; i < draftPlans[num - 1].split("<>").length; i++) {

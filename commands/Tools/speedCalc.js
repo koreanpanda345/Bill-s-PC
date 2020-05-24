@@ -43,14 +43,14 @@ module.exports = {
             scarf2 = true;
             name2 = name2.toLowerCase().replace("scarf ", "");
         }
-        let gen = new Generations(Dex).get(8);
-
-        let pkm1 = new Pokemon(gen, name1, {
+        let gen1 = new Generations(Dex).get(8).species.get(name1) === undefined ? new Generations(Dex).get(7) : new Generations(Dex).get(8);
+        let gen2 = new Generations(Dex).get(8).species.get(name2) === undefined ? new Generations(Dex).get(7) : new Generations(Dex).get(8);
+        let pkm1 = new Pokemon(gen1, name1, {
             item: `${scarf1 === true ? "Choice Scarf" : undefined}`,
             evs: {spe: 252},
             nature: 'Jolly'
         });
-        let pkm2 = new Pokemon(gen, name2, {
+        let pkm2 = new Pokemon(gen2, name2, {
             item: `${scarf2 === true ? "Choice Scarf" : undefined}`,
             evs: {spe: 252},
             nature: 'Jolly'

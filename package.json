@@ -23,13 +23,17 @@
     "express": "^4.17.1",
     "fs-extra": "^9.0.0",
     "js-search": "^2.0.0",
+    "koffing": "^0.4.0",
     "node-fetch": "^2.6.0",
     "pokeapi": "^0.0.1",
     "pokedex-promise-v2": "^3.2.0",
+    "querystring": "^0.2.0",
+    "short-url": "^0.0.1",
     "smogon": "^0.4.3",
     "superagent": "^5.2.2",
     "trie-search": "^1.2.11",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "xmlhttprequest": "^1.8.0"
   },
   "engines": {
     "node": "12.x"
