@@ -4,6 +4,7 @@ const airtable_api = process.env.AIRTABLE_API;
 var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
 module.exports = {
     name: "setprefix",
+    aliases: ["prefix"],
     args: "<desired prefix>",
     description: "Allows admins to change the prefix for the bot.",
     category: "Settings",

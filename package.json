@@ -10,6 +10,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@mattersmedia/html-to-article-json": "^1.22.0",
     "@pkmn/data": "^0.0.1",
     "@pkmn/dex": "^0.0.1",
     "@pkmn/sets": "^0.0.2",
@@ -31,6 +32,7 @@
     "short-url": "^0.0.1",
     "smogon": "^0.4.3",
     "superagent": "^5.2.2",
+    "tinyurl": "^1.1.5",
     "trie-search": "^1.2.11",
     "typescript": "^3.8.3",
     "xmlhttprequest": "^1.8.0"
