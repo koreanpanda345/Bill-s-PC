@@ -95,7 +95,7 @@ module.exports = {
                     );
                   }
                   embed.setDescription(
-                    `${_draft}\nPlease enter the slot number and the pokemon in this format \`number, pokemon\`.\nexample: \`3, lopunny\``
+                    `${_draft}\nPlease enter the slot number and the pokemon in this format \`number, pokemon\`.\nexample: \`3, lopunny\`\nTo Save just type in \`save\` and to cancel type in \`cancel\`.`
                   );
                   msg.edit(embed);
   
@@ -212,7 +212,7 @@ module.exports = {
                       message.delete();
                       m.delete();
                       message.channel
-                        .send(`Canceled`)
+                        .send(`Cancelled`)
                         .then((txt) => txt.delete({ timeout: 10000 }));
                     }
                   });

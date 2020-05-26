@@ -77,6 +77,10 @@ module.exports = {
                   let temp = search.replace("mega ", "");
                   search = temp + "mega";
                 }
+                if(search.includes("-")){
+                  let temp = search.replace(/-/g, "");
+                  search = temp;
+                }
                 fetch(`${endpoint_dex}`)
                   .then((res) => res.text())
                   .catch((error) => {return;})
@@ -110,7 +114,7 @@ module.exports = {
                 message.delete();
                 m.delete();
                 message.channel
-                  .send(`Canceled The Editting process.`)
+                  .send(`Cancelled The Editing process.`)
                   .then((txt) => txt.delete({ timeout: 10000 }));
               } else if (m.content.toLowerCase() === "save") {
                 pick.stop();

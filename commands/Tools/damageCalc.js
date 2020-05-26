@@ -25,7 +25,7 @@ module.exports = {
     name: "damagecalc",
     aliases: ['calc', 'damage'],
     hasArgs: true,
-    args: "<attacking pokemon set>, <defending pokemon set>",
+    args: "<attacking pokemon set>, <defending pokemon set>, (field elements)",
     usage: `b!damagecalc Krookodile @ Choice Scarf
     Ability: Moxie
     EVs: 252 Atk / 4 SpD / 252 Spe
@@ -69,7 +69,7 @@ module.exports = {
                         isSR: ((other.includes("sr") || other.includes("stealth rocks") || other.includes("rocks")) ? true : false),
                         spikes: (other.includes("spikes") ? other.includes("3 spikes") ? other.includes("2 spikes") ? other.includes("1 spikes") ? 1 : 2 : 3: 0: 0),
                         isSeeded: (other.includes("seeds") || other.includes("leech seeds")) ? true : false,
-                        isLightScreen: (other.includes("light screen") || other.includes("scrren")) ? true : false,
+                        isLightScreen: (other.includes("light screen") || other.includes("screen")) ? true : false,
                         isReflect: (other.includes("reflect")) ? true : false,
                         isAuroraVeil: (other.includes("aurora veil") || other.includes("veil")) ? true : false,
                     }
