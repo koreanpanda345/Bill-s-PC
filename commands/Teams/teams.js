@@ -1,46 +1,24 @@
-const Discord = require("discord.js");
-const Airtable = require("airtable");
-const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
+const {MessageEmbed} = require("discord.js");
+const Airtable = require('../../Airtable/index.js');
 module.exports = {
   name: "teams",
   description: "Displays all of your teams.",
   category: "Teams",
-  execute(client, message, args) {
-    base("Teams")
-      .select({
-        filterByFormula: `{userId} = ${message.author.id}`
-      })
-      .eachPage(function page(records, fetchNextPage) {
-        if (!records.length)
-          return message.channel.send(
-            "You do not have any teams stored yet. please use the `b!addteam` command"
-          );
-        let nameArr = [];
-        let teamArr = [];
-        let teamNames = "";
-        let teams = "";
-        let _recordId = "";
-        records.forEach(function(record) {
-          _recordId = record.getId();
-          teamNames = record.get("teamNames");
-          teams = record.get("teams");
-          for (let i = 0; i < teamNames.split(",").length; i++) {
-            nameArr.push(teamNames.split(",")[i]);
-          }
-          for (let i = 0; i < teams.split(",").length; i++) {
-            teamArr.push(teams.split(",")[i]);
-          }
-        });
+  async execute(client, message, args) {
+    let db = new Airtable({userId: message.author.id});
+    let check = await db.teams.checkIfUserHasTeam();
+    if(!check) return message.channel.send(`Sorry, but you do not have any teams yet.`);
+    let teams = await db.teams.getUserTeams();
+    let data = await db.teams.convertTeamsIntoArrays(teams);
+
         let str = "";
-        for (let i = 0; i < nameArr.length; i++) {
-          str += `${i + 1} - ${nameArr[i]}\n`;
+        for (let i = 0; i < data.names.length; i++) {
+          str += `${i + 1} - ${data.names[i]}\n`;
         }
-        let teamEmbed = new Discord.MessageEmbed();
+        let teamEmbed = new MessageEmbed();
         teamEmbed.setColor("RANDOM");
         teamEmbed.setTitle(`${message.author.username}'s teams'`);
         teamEmbed.setDescription(str);
         message.channel.send(teamEmbed);
-      });
   }
 };
