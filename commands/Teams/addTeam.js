@@ -1,7 +1,5 @@
-const Discord = require("discord.js");
-const Airtable = require("airtable");
-const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
+const {MessageEmbed} = require('discord.js');
+const Airtable = require('../../Airtable/index.js');
 const PokePaste = require('../../Util/PokePaste');
 const fetch = require('node-fetch');
 const htmlToArticleJson = require('@mattersmedia/html-to-article-json')();
@@ -13,7 +11,9 @@ module.exports = {
   description: "Allows you to add a team to the PC.",
   category: "Teams",
   usage: "`b!addTeam Best Bunny, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick,dm`",
-  execute(client, message, args) {
+  async execute(client, message, args) {
+    let db = new Airtable({userId: message.author.id});
+    let teamData = {};
     if(args[0].includes("https://pokepast.es")){
       let _return = {  };
       let team = "";
@@ -40,70 +40,10 @@ module.exports = {
   
           _return.team = team.replace(/<>+/g, "\n");
           _return.team = _return.team.replace("Columns Mode / Stat Colours / Light Mode", "");
-          let obj = _return;
-      base(`Teams`).select({
-        filterByFormula: `{userId}=${message.author.id}`
-      }).eachPage((records, _) => {
-        if(!records.length){
-          return base("Teams").create(
-            [
-              {
-                fields: {
-                  userId: message.author.id,
-                  teamNames: obj.title,
-                  teams: obj.team,
-                  visibility: "public"
-                }
-              }
-            ],
-            function(err, record) {
-              if (err) console.error(err);
-              message.channel.send(`Just added ${obj.title} to your 'PC'`);
-              return console.log("Created");
-      });
-    }
-    let nameArr = [];
-          let teamArr = [];
-          let teamNames = "";
-          let teams = "";
-          let _recordId = "";
-          let visbily = "";
-          records.forEach(function(record) {
-            _recordId = record.getId();
-            teamNames = record.get("teamNames");
-            teams = record.get("teams");
-            visbily = record.get("visibility");
-            for (let i = 0; i < teamNames.split(",").length; i++) {
-              nameArr.push(teamNames.split(",")[i]);
-            }
-            for (let i = 0; i < teams.split(",").length; i++) {
-              teamArr.push(teams.split(",")[i]);
-            }
-  
-          base("Teams").update(
-            [
-              {
-                id: _recordId,
-                fields: {
-                  teamNames: teamNames + "," + obj.title,
-                  teams: teams + "," + obj.team,
-                  visibility: visbily + "," + "public"
-                }
-              }
-            ],
-            function(err, record) {
-              if (err) console.error(err);
-              message.channel
-                .send(`Just added ${obj.title} to your 'PC'`)
-                .then(msg => {
-                  message.delete();
-                  //msg.delete(6000);
-                });
-              console.log("updated");
-            });
-  });
-})
-      });
+          teamData.team_name = _return.title;
+          teamData.team_paste = _return.team;
+          teamData.team_send = "public";
+        });
     }
     else{
       let str = args.join(" ");
@@ -115,80 +55,23 @@ module.exports = {
           arglist[i] = _str;
         }
       }
-      if (!arglist)
+      if (!arglist && arglist.length < 2)
         return message.channel.send(
           "Please try again, but provide the command with your team name, and your team in text form with ',' between the team name and your team.example: `b!addTeam Best Bunny, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick`"
         );
-      base("Teams")
-        .select({
-          filterByFormula: `{userId}=${message.author.id}`
-        })
-        .eachPage(function page(records, fetchNextPage) {
-          if (!records.length) {
-             return base("Teams").create(
-              [
-                {
-                  fields: {
-                    userId: message.author.id,
-                    teamNames: arglist[0],
-                    teams: arglist[1],
-                    visibility: arglist[2]
-                  }
-                }
-              ],
-              function(err, record) {
-                if (err) console.error(err);
-                message.channel.send(`Just added ${arglist[0]} to your 'PC'`);
-                return console.log("Created");
-              }
-            );
-          }
-          let nameArr = [];
-          let teamArr = [];
-          let teamNames = "";
-          let teams = "";
-          let _recordId = "";
-          let visbily = "";
-          records.forEach(function(record) {
-            _recordId = record.getId();
-            teamNames = record.get("teamNames");
-            teams = record.get("teams");
-            visbily = record.get("visibility");
-            for (let i = 0; i < teamNames.split(",").length; i++) {
-              nameArr.push(teamNames.split(",")[i]);
-            }
-            for (let i = 0; i < teams.split(",").length; i++) {
-              teamArr.push(teams.split(",")[i]);
-            }
-  
-            if (!arglist[2]) arglist[2] = "public";
-            if (!arglist[2] == "dm" || !arglist == "public")
-              arglist[2] = "public";
-          });
-          base("Teams").update(
-            [
-              {
-                id: _recordId,
-                fields: {
-                  teamNames: teamNames + "," + arglist[0],
-                  teams: teams + "," + arglist[1],
-                  visibility: visbily + "," + arglist[2]
-                }
-              }
-            ],
-            function(err, record) {
-              if (err) console.error(err);
-              message.channel
-                .send(`Just added ${arglist[0]} to your 'PC'`)
-                .then(msg => {
-                  message.delete();
-                  msg.delete(6000);
-                });
-              console.log("updated");
-            }
-          );
-        });
-  
-    }
-      }
-};
+        teamData.team_name = arglist[0];
+        teamData.team_paste = arglist[1];
+        teamData.team_send = arglist[2] || "public";
+  }
+  let result = await db.teams.addTeam(teamData);
+  if(!result) return message.channel.send(`Something happened`);
+  let embed = new MessageEmbed()
+  .setTitle(`Added ${teamData.team_name} to the PC.`)
+  .setColor(`RANDOM`);
+
+  message.channel.send(embed).then((msg) => {
+    message.delete();
+    msg.delete({timeout: 10000});
+  });
+  }
+}

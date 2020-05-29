@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
-const Airtable = require("airtable");
-const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABLE);
+const Airtable = require('../../Airtable/index.js');
 module.exports = {
   name: "getteam",
   aliases: ["gt"],
@@ -10,41 +8,24 @@ module.exports = {
   description: "Gets a team with the team's id",
   category: "Teams",
   usage: "b!getteam 1",
-  execute(client, message, args) {
-    base("Teams")
-      .select({
-        filterByFormula: `{userId} = ${message.author.id}`
+  async execute(client, message, args) {
+    let embed = new Discord.MessageEmbed();
+    let db = new Airtable({userId: message.author.id});
+    let team = await db.teams.getTeam(args[0] - 1);
+    if(!team.success){
+      embed.setTitle('Error');
+      embed.setColor('red');
+      embed.setDescription(team.reason);
+      return message.channel.send(embed).then((msg) => {
+        message.delete();
+        msg.delete({timeout: 10000});
       })
-      .eachPage(function page(records, fetchNextPage) {
-        if (!records.length)
-          return message.channel.send(
-            "You do not have any teams stored yet. please use the `b!addteam` command"
-          );
-        let nameArr = [];
-        let teamArr = [];
-        let sendArr = [];
-        let teamNames = "";
-        let teams = "";
-        let visible = "";
-        records.forEach(function(record) {
-          teamNames = record.get("teamNames");
-          teams = record.get("teams");
-          visible = record.get("visibility");
-          for (let i = 0; i < teamNames.split(",").length; i++) {
-            nameArr.push(teamNames.split(",")[i]);
-          }
-          for (let i = 0; i < teams.split(",").length; i++) {
-            teamArr.push(teams.split(",")[i]);
-          }
-          for (let i = 0; i < visible.split(",").length; i++) {
-            sendArr.push(visible.split(",")[i]);
-          }
-        });
-        let embed = new Discord.MessageEmbed();
+    }
+
         embed.setColor("RANDOM");
-        embed.setTitle(`${nameArr[args[0] - 1]}`);
-        embed.setDescription(`${teamArr[args[0] - 1]}`);
-        if (sendArr[args[0] - 1] === "dm")
+        embed.setTitle(`${team.team.name}`);
+        embed.setDescription(`${team.team.paste}`);
+        if (team.team.team_send === "dm")
           message.author.send(embed).then(msg => {
             message.delete();
             msg.react("⏏️").then(r => {
@@ -56,8 +37,8 @@ module.exports = {
 
               msg.delete({timeout: 60000});
               _import.on("collect", r => {
-                let str = `***${nameArr[args[0] - 1]}***\n\`\`\`${
-                  teamArr[args[0] - 1]
+                let str = `***${team.team.name}***\n\`\`\`${
+                  team.team.paste
                 }\`\`\``;
                 msg.delete();
                 message.author.send(str).then(msg => {
@@ -66,7 +47,7 @@ module.exports = {
               });
             });
           });
-        if (sendArr[args[0] - 1] === "public")
+        if (team.team.send === "public")
           message.channel.send(embed).then(msg => {
             message.delete();
             msg.react("⏏️").then(r => {
@@ -84,8 +65,8 @@ module.exports = {
               });
 
               _import.on("collect", r => {
-                let str = `***${nameArr[args[0] - 1]}***\n\`\`\`${
-                  teamArr[args[0] - 1]
+                let str = `***${team.team.name}***\n\`\`\`${
+                  team.team.paste
                 }\`\`\``;
                 msg.delete();
                 message.channel.send(str).then(msg => {
@@ -97,6 +78,5 @@ module.exports = {
               });
             });
           });
-      });
   }
-};
+}
