@@ -185,11 +185,13 @@ module.exports = class Teams {
       if (isNaN(select))
         return resolve({
           reason: "Sorry, but that id is not a number, please try again.",
+          success: false
         });
       let arr = await this.convertTeamsIntoArrays(teams);
       if (select > arr.names.length)
         return resolve({
           reason: "Sorry, but it doesn't seem like that id exist.",
+          success: false
         });
       arr.teams[select] = newData.team_paste;
       this.base.update(

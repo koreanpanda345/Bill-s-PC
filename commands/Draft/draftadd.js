@@ -1,9 +1,5 @@
-const Airtable = require("airtable");
+const Airtable = require("../../Airtable/index.js");
 const { MessageEmbed } = require("discord.js");
-const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base(
-  process.env.AIRTABLE_TABLE
-);
 const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const fetch = require("node-fetch");
 
@@ -13,6 +9,7 @@ module.exports = {
     category: "Draft",
     description: "Adds a draft plan to your Person Collection of draft plans.",
     execute(client, message, args){
+      let db = new Airtable({userId: message.author.id})
         let embed = new MessageEmbed();
         embed.setColor('RANDOM');
         embed.setTitle(`Untitled`);
@@ -34,29 +31,6 @@ module.exports = {
               .setTitle(`${_name}`);
               let _draft;
                 //tier 1, tier 2, tier 3, tier 3, tier 4, tier 5, mega, free, free, free, free\
-                base("Draft plans")
-                  .select({
-                    filterByFormula: `{usersId} = ${message.author.id}`,
-                  })
-                  .eachPage((records, _) => {
-                    if (!records.length) {
-                      base(`Draft plans`).create(
-                        [
-                          {
-                            fields: {
-                              usersId: message.author.id,
-                              draftname: "",
-                              draftplans: "",
-                              drafttype: "",
-                            },
-                          },
-                        ],
-                        (err, records) => {
-                          if (err) return console.error(err);
-                        }
-                      );
-                    }
-                  });
                 _draft = "tier";
                 embed.setDescription(
                   `Tier Draft
@@ -102,7 +76,7 @@ module.exports = {
                   let pick = message.channel.createMessageCollector(filter, {
                     time: 86400000,
                   });
-                  pick.on("collect", (m) => {
+                  pick.on("collect", async (m) => {
                     if (
                       m.content.toLowerCase() !== "cancel" &&
                       m.content.toLowerCase() !== "save"
@@ -149,7 +123,7 @@ module.exports = {
   
                       let draft = {
                         name: embed.title,
-                        draftType: embed.description.split("Please")[0],
+                        type: embed.description.split("Please")[0],
                         slots: embed.fields,
                         userId: message.author.id,
                       };
@@ -157,54 +131,34 @@ module.exports = {
                       for (let i = 0; i < embed.fields.length; i++) {
                         plan += `${embed.fields[i].name}</> ${embed.fields[i].value}<>`;
                       }
-  
-                      base("Draft plans")
-                        .select({
-                          filterByFormula: `{usersId} = ${draft.userId}`,
+                      draft.plan = plan;
+                      let data = await db.draft.addDraftPlan(draft);
+                      if(!data.success){
+                        let _embed = new MessageEmbed()
+                        _embed.setTitle('Error')
+                        _embed.setColor('red');
+                        _embed.setDescription(data.reason);
+                        return message.channel.send(_embed).then((txt) => {
+                          pick.stop();
+                          msg.delete();
+                          message.delete();
+                          m.delete();
+                          txt.delete({timeout: 10000});
                         })
-                        .eachPage((records, _) => {
-                          let _record;
-                          let _names;
-                          let _plans;
-                          let _type;
-                          records.forEach((record) => {
-                            _record = record.getId();
-                            _names = record.get("draftname");
-                            _plans = record.get("draftplans");
-                            _type = record.get("drafttype");
-                          });
-                          base(`Draft plans`).update(
-                            [
-                              {
-                                id: _record,
-                                fields: {
-                                  draftname:
-                                    (_names === undefined ? "" : _names) +
-                                    draft.name +
-                                    ",",
-                                  draftplans:
-                                    (_plans === undefined ? "" : _plans) +
-                                    plan +
-                                    ",",
-                                  drafttype:
-                                    (_type === undefined ? "" : _type) +
-                                    draft.draftType +
-                                    ",",
-                                },
-                              },
-                            ],
-                            (err, records) => {
-                              if (err) return console.error(err);
-                              message.delete();
-                              msg.delete();
-                              m.delete();
-          
-                              message.channel
-                                .send(`I saved your draft plan.`)
-                                .then((txt) => txt.delete({ timeout: 10000 }));
-                            }
-                          );
-                        });
+                      }
+                      let _embed = new MessageEmbed()
+                      
+                      _embed.setTitle(`Added ${draft.name} to the PC.`);
+                      _embed.setColor('RANDOM');
+                      _embed.setDescription('');
+
+                      message.channel.send(_embed).then(txt => {
+                        pick.stop();
+                        msg.delete();
+                        message.delete();
+                        m.delete();
+                        txt.delete({timeout: 10000});                        
+                      })
                     }
                     if (m.content.toLowerCase() === "cancel") {
                       pick.stop();

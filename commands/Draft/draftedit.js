@@ -1,9 +1,5 @@
-const Airtable = require("airtable");
+const Airtable = require("../../Airtable/index.js");
 const { MessageEmbed } = require("discord.js");
-const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base(
-  process.env.AIRTABLE_TABLE
-);
 const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const fetch = require("node-fetch");
 
@@ -13,45 +9,16 @@ module.exports = {
     description: "Allows you to edit a draft.",
     usage: "b!editdraft <draft id>",
     category: "Draft",
-    execute(client, message, args){
+    async execute(client, message, args){
+      let db = new Airtable({userId: message.author.id});
         let num = Number(args[0]);
-      base(`Draft plans`)
-        .select({
-          filterByFormula: `{usersId} = ${message.author.id}`,
-        })
-        .eachPage((records, _) => {
-          if (!records.length)
-            return message.chanenl.send(
-              `Sorry, but it looks like you do not have any draft plans.`
-            );
-          let _record = "";
-          let _draftName = "";
-          let draftName = [];
-          let _draftPlans = "";
-          let draftPlans = [];
-          let _draftType = "";
-          let draftType = [];
-          records.forEach((record) => {
-            _record = record.getId();
-            _draftName = record.get("draftname");
-            _draftPlans = record.get("draftplans");
-            _draftType = record.get("drafttype");
-          });
-          for (let i = 0; i < _draftName.split(",").length; i++) {
-            draftName.push(_draftName.split(",")[i]);
-          }
-          for (let i = 0; i < _draftPlans.split(",").length; i++) {
-            draftPlans.push(_draftPlans.split(",")[i]);
-          }
-          for (let i = 0; i < _draftType.split(",").length; i++) {
-            draftType.push(_draftType.split(",")[i]);
-          }
-          let embed = new MessageEmbed();
+        let getData = await db.draft.getDraftPlan(num);  
+        let embed = new MessageEmbed();
           embed.setColor('RANDOM');
-          embed.setTitle(draftName[num - 1]);
-          embed.setDescription(draftType[num - 1] + "Please enter the slot number and the pokemon in this format `number, pokemon`.\nexample: `3, lopunny`");
-          for (let i = 0; i < draftPlans[num - 1].split("<>").length; i++) {
-            let field = draftPlans[num - 1].split("<>");
+          embed.setTitle(getData.name);
+          embed.setDescription(getData.type + "Please enter the slot number and the pokemon in this format `number, pokemon`.\nexample: `3, lopunny`");
+          for (let i = 0; i < getData.plan.split("<>").length; i++) {
+            let field = getData.plan.split("<>");
             let name = field[i].split("</>")[0];
             let value = field[i].split("</>")[1];
             if (name !== "")
@@ -63,7 +30,7 @@ module.exports = {
             let pick = message.channel.createMessageCollector(filter, {
               time: 86400000,
             });
-            pick.on("collect", (m) => {
+            pick.on("collect", async (m) => {
               if (
                 m.content.toLowerCase() !== "cancel" &&
                 m.content.toLowerCase() !== "save"
@@ -76,10 +43,6 @@ module.exports = {
                 if (search.includes("mega ")) {
                   let temp = search.replace("mega ", "");
                   search = temp + "mega";
-                }
-                if(search.includes("-")){
-                  let temp = search.replace(/-/g, "");
-                  search = temp;
                 }
                 fetch(`${endpoint_dex}`)
                   .then((res) => res.text())
@@ -114,7 +77,7 @@ module.exports = {
                 message.delete();
                 m.delete();
                 message.channel
-                  .send(`Cancelled The Editing process.`)
+                  .send(`Canceled The Editting process.`)
                   .then((txt) => txt.delete({ timeout: 10000 }));
               } else if (m.content.toLowerCase() === "save") {
                 pick.stop();
@@ -127,33 +90,36 @@ module.exports = {
                   plan += `${embed.fields[i].name}</> ${embed.fields[i].value}<>`;
                 }
                 //console.log(plan);
-                draftPlans[num - 1] = plan;
-                console.log(draftPlans[num - 1]);
+                let result = await db.draft.editDraftPlan(num, {plan: plan});
+                let _embed = new MessageEmbed();
+                if(!result.success){
+                  _embed.setTitle('Error');
+                  _embed.setColor('red');
+                  _embed.setDescription(result.reason);
 
-                base("Draft plans").update(
-                  [
-                    {
-                      id: _record,
-                      fields: {
-                        draftplans: draftPlans.toString(),
-                      },
-                    },
-                  ],
-                  (err, records) => {
-                    if (err) return console.error(err);
-                    console.log(`Updated draft plan.`);
-                    message.delete();
+                  return message.channel.send(_embed).then((txt) => {
+                    pick.stop();
                     msg.delete();
+                    message.delete();
                     m.delete();
+                    txt.delete({timeout: 10000});
+                  })
+                }
 
-                    message.channel
-                      .send(`Updated your draft plan.`)
-                      .then((txt) => txt.delete({ timeout: 10000 }));
-                  }
-                );
+                _embed.setTitle('Edited Draft.');
+                _embed.setColor('RANDOM');
+                _embed.setDescription(`Edited ${result.draft} in the PC.`);
+
+                message.channel.send(_embed).then((txt) => {
+                  pick.stop();
+                  msg.delete();
+                  message.delete();
+                  m.delete();
+                  txt.delete({timeout: 10000});
+                });
+
               }
             });
           });
-        });
     }
 }

@@ -1,9 +1,5 @@
-const Airtable = require("airtable");
 const { MessageEmbed } = require("discord.js");
-const airtable_api = process.env.AIRTABLE_API;
-var base = new Airtable({ apiKey: airtable_api }).base(
-  process.env.AIRTABLE_TABLE
-);
+const Airtable = require('../../Airtable/index.js');
 const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const endpoint_sprites = process.env.SDSPRITES_ENDPOINT;
 const fetch = require("node-fetch");
@@ -14,49 +10,29 @@ module.exports = {
   category: "Draft",
   description: "Allows you to view your draft.",
   usage: "b!viewdraft <draft id>",
-  execute(client, message, args) {
-        if(!isNaN(Number(args[0])))
-            args[1] = args[0];
-      base(`Draft plans`)
-        .select({
-          filterByFormula: `{usersId} = ${message.author.id}`,
-        })
-        .eachPage((records, _) => {
-          if (!records.length)
-            return message.channel.send(
-              `Sorry, but it looks like you don't have any current draft plans.`
-            );
-          let num = Number(args[1]);
-          let _draftName = "";
-          let draftName = [];
-          let _draftPlan = "";
-          let draftPlans = [];
-          let _draftType = "";
-          let draftType = [];
-          records.forEach((record) => {
-            _draftName = record.get("draftname");
-            _draftPlan = record.get("draftplans");
-            _draftType = record.get("drafttype");
-          });
-          for (let i = 0; i < _draftName.split(",").length; i++) {
-            draftName.push(_draftName.split(",")[i]);
-          }
-          for (let i = 0; i < _draftPlan.split(",").length; i++) {
-            draftPlans.push(_draftPlan.split(",")[i]);
-          }
-          for (let i = 0; i < _draftType.split(",").length; i++) {
-            draftType.push(_draftType.split(",")[i]);
-          }
+  async execute(client, message, args) {
+          let db = new Airtable({userId: message.author.id});
+          let data = await db.draft.getDraftPlan(args[0]);
           let embed = new MessageEmbed();
+          if(!data.success){
+            embed.setTitle('Error');
+            embed.setColor('red');
+            embed.setDescription(data.reason);
+
+            return message.channel.send(embed).then((msg) => {
+              message.delete();
+              msg.delete({timeout: 10000});
+            })
+          }
           embed.setColor('RANDOM');
-          embed.setTitle(`Draft Plan: ${draftName[num - 1]}`);
-          embed.setDescription(`Draft Type: ${draftType[num - 1]}`);
+          embed.setTitle(`Draft Plan: ${data.name}`);
+          embed.setDescription(`Draft Type: ${data.type}`);
           embed.addField("\u200b", "\u200b");
           let page = 0;
           let pages = [];
           let tiers = [];
-          for (let i = 0; i < draftPlans[num - 1].split("<>").length; i++) {
-            let field = draftPlans[num - 1].split("<>");
+          for (let i = 0; i < data.plan.split("<>").length; i++) {
+            let field = data.plan.split("<>");
 
             let name = field[i].split("</>")[0];
             let value = field[i].split("</>")[1];
@@ -88,7 +64,6 @@ module.exports = {
                   .then(async body => {
                     let res = eval(body);
                     let search = pages[page - 1].replace(/\\n+/g, "");
-                    console.log(search);
                     if(search.toLowerCase().includes("-dusk")){
                       let temp = search.replace(/-dusk+/g, "dusk");
                       search = temp;
@@ -97,9 +72,7 @@ module.exports = {
                       let temp = search.replace(/-mega+/g, "mega");
                       search = temp;
                     }
-                    console.log(search);
                     let poke = res[search];
-                    console.log(poke);
                     if(poke === undefined){
                       embed.setTitle(`${tiers[page - 1]}: ---`);
                       embed.setDescription(`No Pokemon.`);
@@ -119,7 +92,6 @@ module.exports = {
                     }
                     let abilities;
                     let ab = Object.values(poke.abilities);
-                    console.log(ab);
                     for(let i = 0; i < ab.length; i++){
                       abilities += `${ab[i]}\n`;
                     }
@@ -157,7 +129,6 @@ module.exports = {
                 .then(async body => {
                   let res = eval(body);
                   let search = pages[page - 1].replace(/\\n+/g, "");
-                  console.log(search);
                   if(search.toLowerCase().includes("-dusk")){
                     let temp = search.replace(/-dusk+/g, "dusk");
                     search = temp;
@@ -166,9 +137,7 @@ module.exports = {
                     let temp = search.replace(/-mega+/g, "mega");
                     search = temp;
                   }
-                  console.log(search);
                   let poke = res[search];
-                  console.log(poke);
                   if(poke === undefined){
                     embed.setTitle(`${tiers[page - 1]}: ---`);
                     embed.setDescription(`No Pokemon.`);
@@ -188,7 +157,6 @@ module.exports = {
                   }
                   let abilities;
                   let ab = Object.values(poke.abilities);
-                  console.log(ab);
                   for(let i = 0; i < ab.length; i++){
                     abilities += `${ab[i]}\n`;
                   }
@@ -219,7 +187,6 @@ module.exports = {
           })
             })
           })
-        });
 
   },
 };
