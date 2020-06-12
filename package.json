@@ -5,22 +5,25 @@
   "name": "hello-express",
   "version": "0.0.1",
   "description": "A simple Node app built on Express, instantly up and running.",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@mattersmedia/html-to-article-json": "^1.22.0",
     "@pkmn/data": "^0.0.1",
     "@pkmn/dex": "^0.0.1",
     "@pkmn/sets": "^0.0.2",
+    "@pkmn/sim": "0.0.6",
     "@pokemon-showdown/sets": "^0.4.0",
     "@smogon/calc": "^0.3.0",
     "airtable": "^0.8.1",
     "ascii-table": "^0.0.9",
+    "axios": "^0.19.2",
     "canvas": "^2.6.1",
     "canvas-constructor": "^3.2.0",
     "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fs-extra": "^9.0.0",
     "js-search": "^2.0.0",

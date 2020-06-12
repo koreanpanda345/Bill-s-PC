@@ -7,6 +7,7 @@ const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const endpoint_ability = process.env.SDABILITY_ENDPOINT;
 const endpoint_sprites = process.env.SDSPRITES_ENDPOINT;
 const typeColor = require('./../../Util/TypeColor');
+const Ps = require('./../../Util/PokemonShowdown');
 module.exports = {
   name: "dex",
   aliases: ["search", "p"],
@@ -15,82 +16,71 @@ module.exports = {
   description: "Displays info about a pokemon.",
   category: "Tools",
   usage: "b!dex Mega Lopunny",
-  execute(client, message, args) {
+  async execute(client, message, args) {
+    let ps = new Ps();
     if(args[0] === 'item'){
       let _search = args.join(" ").slice(args[0].length + 1);
-      fetch(endpoint_items)
-      .then(res => res.text())
-      .catch(error => console.error(error))
-      .then((body) => {
-        let res = eval(body);
-        console.log(res);
-        let search = _search.toLowerCase().replace(/ +/g, "");
-        let item = res[search];
-        let embed = new Discord.MessageEmbed();
-        embed.setColor('RANDOM');
-        embed.setTitle(`Info on ${item.name}`);
-        embed.setDescription(`Description: ${item.desc}`);
-        if(item.megaStone)
-          embed.addField(`Mega Evolves:`, `${item.megaEvolves}`);
-        if(item.fling)
-          embed.addField(`Fling Power:`, `${item.fling.basePower}`);
-        message.channel.send(embed);
-        })
-      .catch(function(err){
-        console.error(err);
-        return message.channel.send(`I couldn't find that item, maybe you spelt it wrong?`)
-      })
+      let search = _search.toLowerCase().replace(/ +/g, "");
+      let item = await (await ps.itemDex(search));
+
+      let embed = new Discord.MessageEmbed();
+
+      if(!item.success) {
+       embed.setColor("RED");
+       embed.setTitle("Error");
+       embed.setDescription(item.reason); 
+        return message.channel.send(embed);
+      }
+
+      embed.setColor('RANDOM');
+      embed.setTitle(`Info on ${item.data.name}`);
+      embed.setDescription(`Description: ${item.data.desc}`);
+      if(item.megaStone)
+        embed.addField(`Mega Evolves:`, `${item.data.megaEvolves}`);
+      if(item.fling)
+        embed.addField(`Fling Power:`, `${item.data.fling.basePower}`);
+      message.channel.send(embed);
     }
     else if(args[0] === "ability"){
       let _search = args.join(" ").slice(args[0].length + 1);
-      fetch(endpoint_ability)
-      .then(res => res.text())
-      .catch(error => console.error(error))
-      .then(body => {
-        let res = eval(body);
-        //console.log(res);
-        let search = _search.toLowerCase().replace(/ +/g, "");
-        let ability = res[search];
-        console.log(ability);
+      let search = _search.toLowerCase().replace(/ +/g, "");
+        let ability = await ps.abilityDex(search);
         let embed = new Discord.MessageEmbed();
-        embed.setTitle(`Info on ${ability.name}`);
-        embed.setDescription(`Description: ${ability.desc}\n\nShort Description: ${ability.shortDesc}`);
+        if(!ability.success){
+          embed.setColor("RED");
+          embed.setTitle("Error");
+          embed.setDescription(ability.reason);
+          return message.channel.send(embed);
+        }
+        embed.setTitle(`Info on ${ability.data.name}`);
+        embed.setDescription(`Description: ${ability.data.desc}\n\nShort Description: ${ability.data.shortDesc}`);
         embed.setColor(`RANDOM`);
-        embed.addField(`Rating`, `${ability.rating}`)
+        embed.addField(`Rating`, `${ability.data.rating}`)
         message.channel.send(embed);
-      })
-      .catch(function(err){
-        console.error(err);
-        return message.channel.send(`I couldn't find that ability, maybe you spelt it wrong?`)
-      })
+
     }
     else if(args[0] === "move"){
       let _search = args.join(" ").slice(args[0].length + 1);
-      fetch(endpoint_moves)
-      .then(res => res.text())
-      .catch(error => console.error(error))
-      .then(body => {  
-        let res = eval(body);
-        //console.log(res);
+    
         let search = _search.toLowerCase().replace(/ +/g, "");
-        let move = res[search];
-        console.log(move);
+        let move = await ps.moveDex(search);
         let embed = new Discord.MessageEmbed();
-      embed.setColor(typeColor[move.type][random(typeColor[move.type].length)]);
-      embed.setTitle(`Info on ${move.name}`);
-      embed.setDescription(`Description: ${move.desc}\n\nShort Description: ${move.shortDesc}`);
-      embed.addField(`Accuracy: `, `${move.accuracy === true ? "---" : move.accuracy}`, true);
-      embed.addField(`${move.category} | Base Power: `, `${move.basePower === 0 ? "---" : move.basePower}`, true);
-      embed.addField(`PP:`, `${move.pp} PP`, true);
-      embed.addField(`Priority`, `${move.priority}`, true);
-      embed.addField(`Type`, `${move.type}`, true);
-      embed.addField(`Target`, `${move.target === 'normal' ? "Adjacent Pokemon" : move.target}`, true);
+        if(!move.success){
+          embed.setColor("RED");
+          embed.setTitle("Error");
+          embed.setDescription(move.reason);
+          return message.channel.send(embed);
+        }
+      embed.setColor(typeColor[move.data.type][random(typeColor[move.data.type].length)]);
+      embed.setTitle(`Info on ${move.data.name}`);
+      embed.setDescription(`Description: ${move.data.desc}\n\nShort Description: ${move.data.shortDesc}`);
+      embed.addField(`Accuracy: `, `${move.data.accuracy === true ? "---" : move.data.accuracy}`, true);
+      embed.addField(`${move.data.category} | Base Power: `, `${move.data.basePower === 0 ? "---" : move.data.basePower}`, true);
+      embed.addField(`PP:`, `${move.data.pp} PP`, true);
+      embed.addField(`Priority`, `${move.data.priority}`, true);
+      embed.addField(`Type`, `${move.data.type}`, true);
+      embed.addField(`Target`, `${move.data.target === 'normal' ? "Adjacent Pokemon" : move.data.target}`, true);
       message.channel.send(embed);
-      })
-      .catch(function(err){
-        console.error(err);
-        return message.channel.send(`I couldn't find that move, maybe you spelt it wrong?`)
-      })
     }
     if(!options.includes(args[0])){
       let search = args.join(" ").toLowerCase();

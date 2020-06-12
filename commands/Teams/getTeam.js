@@ -11,7 +11,7 @@ module.exports = {
   async execute(client, message, args) {
     let embed = new Discord.MessageEmbed();
     let db = new Airtable({userId: message.author.id});
-    let team = await db.teams.getTeam(args[0] - 1);
+    let team = await db.teams.getTeam(args[0]);
     if(!team.success){
       embed.setTitle('Error');
       embed.setColor('red');

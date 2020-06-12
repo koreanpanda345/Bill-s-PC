@@ -13,37 +13,18 @@ module.exports = {
   usage: "`b!addTeam Best Bunny, Bun Bun (Lopunny) @ Lopunnite\nAbility: Limber\nEVs: 252 Atk / 4 SpD / 252 Spe\nJolly Nature\n- Fake Out\n- Ice Punch\n- Return\n- High Jump Kick,dm`",
   async execute(client, message, args) {
     let db = new Airtable({userId: message.author.id});
+    let pokepaste = new PokePaste();
     let teamData = {};
     if(args[0].includes("https://pokepast.es")){
       let _return = {  };
       let team = "";
       let url = args[0];
-      fetch(url)
-      .then(res => res.text())
-      .catch(error => console.error(error))
-      .then(body => {
-          let html = body;
-          const json = htmlToArticleJson(html);
-  
-          for(let i = 0; i < json.length; i++){
-              if(json[i].type === "paragraph"){
-                  
-                  let content = json[i].children[0].content;
-                  content = content.replace(/Ability:+/g, "<>Ability:");
-                  content = content.replace(/EVs:+/g, "<>EVs:");
-                  content = content.replace(/IVs:+/g, "<>IVs:");
-                  content = content.replace(/(- )+/g, "<>- ");
-                  team += content + "\n\n";
-              }
-          }
-          _return.title = json[json.length - 3].children[0].content;
-  
-          _return.team = team.replace(/<>+/g, "\n");
-          _return.team = _return.team.replace("Columns Mode / Stat Colours / Light Mode", "");
-          teamData.team_name = _return.title;
-          teamData.team_paste = _return.team;
-          teamData.team_send = "public";
-        });
+      let data = await pokepaste.import(url);
+      console.log(data);
+      if(!data.success) return;
+      teamData.team_name = data.team_name;
+      teamData.team_paste = data.team_paste;
+      teamData.team_send = data.team_send;
     }
     else{
       let str = args.join(" ");
