@@ -13,11 +13,11 @@ module.exports = {
 
         let str = "";
         for (let i = 0; i < data.names.length; i++) {
-          str += `${i + 1} - ${data.names[i]}\n`;
+          str += `__**${i + 1}**__ - ${data.names[i]}\n`;
         }
         let teamEmbed = new MessageEmbed();
         teamEmbed.setColor("RANDOM");
-        teamEmbed.setTitle(`${message.author.username}'s teams'`);
+        teamEmbed.setTitle(`${message.author.username}'s Teams`);
         teamEmbed.setDescription(str);
         message.channel.send(teamEmbed);
   }

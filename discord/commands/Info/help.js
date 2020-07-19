@@ -16,7 +16,7 @@ module.exports = {
 
         if(!args[0]){
             const categories = readdirSync(`./commands/`);
-            embed.setDescription(`These are the avaliable commands for ${message.guild.me.displayName}\nYou can find more info on [my website](https://koreanpanda345.gitbook.io/bill-s-pc/commands/listed-of-commands)`);
+            embed.setDescription(`These are the avaliable commands for ${message.guild.me.displayName}\nYou can find more info on [my website](https://bills-pc.netlify.app/commands)`);
             embed.setFooter(`${message.guild.me.displayName} | Total Commands: ${client.commands.size}`);
             embed.setThumbnail(client.user.displayAvatarURL({format: 'jpg'}));
             categories.forEach(category => {
