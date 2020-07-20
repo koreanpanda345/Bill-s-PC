@@ -7,6 +7,7 @@ const endpoint_moves = process.env.SDMOVES_ENDPOINT;
 const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const endpoint_ability = process.env.SDABILITY_ENDPOINT;
 const endpoint_sprites = process.env.SDSPRITES_ENDPOINT;
+const endpoint_learnset = process.env.SDLEARNSET_ENDPOINT;
 const { calculate, Pokemon, Move, Field } = require("@smogon/calc");
 module.exports = class PokemonShowdown {
   constructor() {}
@@ -94,6 +95,31 @@ module.exports = class PokemonShowdown {
     name = name.toLowerCase();
     return `${endpoint_sprites}${name}.gif`;
   };
+  /**
+  * 
+  * @param {string} name 
+  * @return {{success: Boolean, reason?: String, data?:any}}
+  */
+  getLearnset = async(name) => {
+    let gen = new Generations(Dex);
+    let learnset = gen.get(8).species.get(name) == undefined 
+    ? gen.get(7).learnsets.get(name) 
+    : gen.get(8).learnsets.get(name);
+    console.log((await learnset).learnset);
+    if(learnset == undefined) {
+      let data = await new Promise((resolve, reject) => {
+        axios.get(endpoint_learnset).then((res) => {
+          let json = eval(res.data);
+          let _learnset = json[name];
+          if(_learnset.learnset == (undefined || null)) return {success: false, reason: "Couldn't find a learnset for that pokemon."};
+          return {success: true, data: _learnset.learnset};
+        })
+      })
+      return data;
+    }
+    return {success: true, data: (await learnset).learnset};
+  }
+
   damageCalc = async (data) => {
     if (!data.attacking)
       return { reason: "There was no attacking pokemon set.", success: false };

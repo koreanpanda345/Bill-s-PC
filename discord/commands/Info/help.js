@@ -15,8 +15,10 @@ module.exports = {
         embed.setThumbnail(client.user.displayAvatarURL);
 
         if(!args[0]){
-            const categories = readdirSync(`./commands/`);
-            embed.setDescription(`These are the avaliable commands for ${message.guild.me.displayName}\nYou can find more info on [my website](https://bills-pc.netlify.app/commands)`);
+            const categories = readdirSync(`./discord/commands/`);
+            embed.setDescription(`These are the avaliable commands for ${message.guild.me.displayName}
+            You can find more info on [my website](https://bills-pc.netlify.app/commands)
+            If you need additional help, or just want to be up to date with what is going on with the bot. Come join the [discord server](https://discord.gg/uhMbRMa) for it.`);
             embed.setFooter(`${message.guild.me.displayName} | Total Commands: ${client.commands.size}`);
             embed.setThumbnail(client.user.displayAvatarURL({format: 'jpg'}));
             categories.forEach(category => {

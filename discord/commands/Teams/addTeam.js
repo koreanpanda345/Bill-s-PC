@@ -16,8 +16,6 @@ module.exports = {
     let pokepaste = new PokePaste();
     let teamData = {};
     if(args[0].includes("https://pokepast.es")){
-      let _return = {  };
-      let team = "";
       let url = args[0];
       let data = await pokepaste.import(url);
       console.log(data);

@@ -1,15 +1,15 @@
-const {Client, Message} = require('ps-client');
+const {Client} = require('showdown.js');
 require('dotenv').config();
 let client = new Client({
-    username: process.env.SHOWDOWN_USERNAME,
-    password: process.env.SHOWDONW_PASSWORD,
-    server: process.env.SHOWDOWN_TEST_SERVER,
-    port: process.env.SHOWDOWN_TEST_PORT, 
-    debug: true, 
-    autoJoin: ["Lobby"]
+    name: process.env.SHOWDOWN_USERNAME,
+    pass: process.env.SHOWDONW_PASSWORD,
+    host: process.env.SHOWDOWN_TEST_HOST,
+    port: process.env.SHOWDOWN_TEST_PORT,  
+    baseRooms: ["Lobby"]
 });
-
-client.connect();
+  client.on('ready', () => {
+    console.log('Bot is logined');
+  })
 
 client.on('message', 
 /**
@@ -42,3 +42,5 @@ async function(message){
         }
     } 
 });
+
+client.connect();

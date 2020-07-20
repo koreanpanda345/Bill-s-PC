@@ -12,7 +12,7 @@ var base = new Airtable({ apiKey: airtable_api }).base(process.env.AIRTABLE_TABL
  */
 module.exports = async (client, message) => {
   if (message.author.bot) return;
-  if (message.channel.type === "dm") return;
+  if(message.channel.type == "dm") return;
   let prefix = _prefix;
 base('Settings').select({
   filterByFormula: `{guildId} = ${message.guild.id}`
