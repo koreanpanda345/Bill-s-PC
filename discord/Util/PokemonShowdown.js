@@ -1,5 +1,5 @@
 const { Sets } = require("@pkmn/sets");
-const { Generations } = require("@pkmn/data");
+const { Generations, Generation, Types, Type } = require("@pkmn/data");
 const { Dex } = require("@pkmn/dex");
 const axios = require("axios").default;
 const endpoint_items = process.env.SDITEMS_ENDPOINT;
@@ -69,6 +69,8 @@ module.exports = class PokemonShowdown {
   };
 
   pokemonDex = async (name) => {
+    name = name.replace(" ", "");
+    console.log(name);
     let pokemon = Dex.getSpecies(name);
     if (pokemon.num === 0) {
       let data = await new Promise((resolve, reject) => {
@@ -118,6 +120,15 @@ module.exports = class PokemonShowdown {
       return data;
     }
     return {success: true, data: (await learnset).learnset};
+  }
+  /**
+   * 
+   * @param {string} name 
+   * @returns {Type}
+   */
+  getType = (name) => {
+    let type = new Types(Dex).get(name);
+    return type;    
   }
 
   damageCalc = async (data) => {

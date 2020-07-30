@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const Pokedex = require("pokedex-promise-v2");
 const P = new Pokedex();
+
+
 /***
  * This is the coverage command
  * This command will display the type coverage of a type.

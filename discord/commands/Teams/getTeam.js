@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const Airtable = require('../../Airtable/index.js');
+const { TypeCoverage } = require('../../Util/TeamFunctions');
 module.exports = {
   name: "getteam",
   aliases: ["gt"],

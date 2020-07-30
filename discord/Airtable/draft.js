@@ -194,7 +194,11 @@ module.exports = class Draft {
     })
     return result;
   }
-
+  /**
+   * 
+   * @param {Number} select
+   * @returns {{name: string, plan: string, type: string, success: Boolean}} 
+   */
   getDraftPlan = async (select) => {
     let data = await new Promise(async (resolve, reject) => {
       let check = await this.checkIfUserHasDraft();

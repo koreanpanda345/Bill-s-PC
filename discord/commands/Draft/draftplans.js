@@ -55,7 +55,7 @@ module.exports = {
         );
       tiers.push(name.split(": ")[1]);
     }
-
+    console.log(pages);
     message.member.send(embed).then((msg) => {
       msg.react("◀️").then((r) => {
         msg.react("❎").then((r) => {

@@ -2,7 +2,8 @@ const Airtable = require("../../Airtable/index.js");
 const { MessageEmbed, Client, Message } = require("discord.js");
 const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const fetch = require("node-fetch");
-
+const Ps = require('../../Util/PokemonShowdown');
+const { checkIFPokemonHasPivotMoves, checkIfPokemonHasClericMoves, checkIfPokemonHasHazardsMoves, checkIfPokemonHasHazardRemovalMoves } = require('../../Util/DraftFunction');
 module.exports = {
     name: "adddraft",
     aliases: ["ad"],
@@ -14,7 +15,8 @@ module.exports = {
      * @param {Message} message 
      * @param {String[]} args 
      */
-    execute(client, message, args){
+    async execute(client, message, args){
+      let ps = new Ps();
       let db = new Airtable({userId: message.author.id})
         let embed = new MessageEmbed();
         embed.setColor('RANDOM');
@@ -23,7 +25,7 @@ module.exports = {
           `Please Type in what you would like your draft plan's name to be.`
         );
   
-        message.channel.send(embed).then((msg) => {
+        message.channel.send(embed).then(async (msg) => {
           let filter = (m) => m.author.id === message.author.id;
           let name = message.channel.createMessageCollector(filter, {
             time: 86400000,
@@ -105,33 +107,31 @@ module.exports = {
                         temp = temp.replace("alolan", "");
                         search = temp + "alola";
                     }
-                      fetch(`${endpoint_dex}`)
-                        .then((res) => res.text())
-                        .catch((error) => {return;})
-                        .then((body) => {
-                          let res = eval(body);
-                          let poke = res[search];
+                    let poke = await ps.pokemonDex(search);
+                    let pivot = await checkIFPokemonHasPivotMoves(poke.data.name.toLowerCase());
+                    let cleric = await checkIfPokemonHasClericMoves(poke.data.name.toLowerCase());
+                    let hazard = await checkIfPokemonHasHazardsMoves(poke.data.name.toLowerCase());
+                    let removal = await checkIfPokemonHasHazardRemovalMoves(poke.data.name.toLowerCase());
                           let abilities;
-                          let ab = Object.values(poke.abilities);
+                          let ab = Object.values(poke.data.abilities);
                           for(let i = 0; i < ab.length; i++){
                               abilities += `- ${ab[i]}\n`;
                           }
                           embed.fields[Number(__tier) - 1] = {
                             name: embed.fields[Number(__tier) - 1].name,
-                            value: `${poke.name}\nType: ${
-                              poke.types.length === 2
-                                ? `${poke.types[0]} || ${poke.types[1]}`
-                                : `${poke.types[0]}`
+                            value: `${poke.data.name}\nType: ${
+                              poke.data.types.length === 2
+                                ? `${poke.data.types[0]} || ${poke.data.types[1]}`
+                                : `${poke.data.types[0]}`
                             }\n Abilities:
                             ${
                               abilities.replace("undefined", "")
                             }\nBase Speed: ${
-                              poke.baseStats.spe
-                            }`,
+                              poke.data.baseStats.spe
+                            }\n${pivot.data.length != 0 ? `Pivot Moves:\n${pivot.data.join(" ")}\n` : ''}${cleric.data.length != 0 ? `Cleric Moves:\n${cleric.data.join(" ")}\n` : ''}${hazard.data.length != 0 ? `Hazards Moves:\n${hazard.data.join(" ")}`: ''}${removal.data.length != 0 ? `Hazard Removal Moves:\n${removal.data.join(" ")}` : ''}`,
                           };
                           _msg.edit(embed);
                           message.channel.send(`Added pokemon.`).then(__msg => __msg.delete({timeout: 5000}));
-                        });
                     }
                     if (m.content.toLowerCase() === "save") {
                       pick.stop();
