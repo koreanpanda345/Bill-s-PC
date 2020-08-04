@@ -2,6 +2,7 @@ const { Client, Message, MessageEmbed } = require("discord.js");
 const Airtable = require("../../Airtable/index");
 const Ps = require("../../Util/PokemonShowdown");
 const { TypeCalculator } = require("../../Util/DraftFunction");
+const { sendDm } = require('../../Util/SettingsFunction');
 module.exports = {
   name: "draftweak",
   aliases: ["drafttypechart", "draftchart", "dw"],
@@ -50,7 +51,7 @@ module.exports = {
     for (let i = 0; i < pokemon.length; i++)
       desc += `${pokemon[i]} - Types: ${types[i].replace("||", " ")}\n`;
     embed.setDescription(desc);
-    TypeCalculator(types).then((chart) => {
+    TypeCalculator(types).then(async (chart) => {
       embed.setTitle(`${draft.name} Type Chart`);
       let _types = [
         "Bug",
@@ -86,10 +87,17 @@ module.exports = {
         );
       });
       embed.setColor("RANDOM");
-      message.author.send(embed);
-      message.channel.send(`Sent type chart to your dm`).then(msg => {
-        msg.delete({timeout: 10000});
+      await sendDm(message, embed).then((msg) => {
+        msg.react("❎").then((r) => {
+          let filter = (reaction, user) =>  reaction.emoji.name === "❎" && user.id === message.author.id;
+          let del = msg.createReactionCollector(filter, {time: 1000000});
+          del.on('collect', () => {
+            msg.delete();
+            del.stop();
+          })
+        })
+        
       })
-    });
+    })
   },
 };

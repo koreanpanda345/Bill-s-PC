@@ -28,7 +28,7 @@ module.exports = class Airtable {
   showdown;
   /**
    * 
-   * @param {{userId: string, showdown_name: string, discord_id: string}} data 
+   * @param {{userId: string, showdown_name: string, discord_id: string, guildId: string}} data 
    */
   constructor(data){
     // This handles the Team airtable stuff.

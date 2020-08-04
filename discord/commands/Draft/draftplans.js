@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Message, Client } = require("discord.js");
 const Airtable = require("../../Airtable/index.js");
 const endpoint_dex = process.env.SDDEX_ENDPOINT;
 const endpoint_sprites = process.env.SDSPRITES_ENDPOINT;
@@ -11,13 +11,19 @@ const {
   checkIfPokemonHasHazardsMoves,
   checkIfPokemonHasHazardRemovalMoves,
 } = require("./../../Util/DraftFunction");
-const { remove } = require("fs-extra");
+const { sendDm } = require('../../Util/SettingsFunction');
 module.exports = {
   name: "viewdraft",
   aliases: ["vd"],
   category: "Draft",
   description: "Allows you to view your draft.",
   usage: "b!viewdraft <draft id>",
+  /**
+   * 
+   * @param {Client} client 
+   * @param {Message} message 
+   * @param {String[]} args 
+   */
   async execute(client, message, args) {
     let ps = new Ps();
     let db = new Airtable({ userId: message.author.id });
@@ -42,7 +48,7 @@ module.exports = {
     let tiers = [];
     for (let i = 0; i < data.plan.split("<>").length; i++) {
       let field = data.plan.split("<>");
-
+      
       let name = field[i].split("</>")[0];
       let value = field[i].split("</>")[1];
       if (value !== undefined)
@@ -56,7 +62,7 @@ module.exports = {
       tiers.push(name.split(": ")[1]);
     }
     console.log(pages);
-    message.member.send(embed).then((msg) => {
+    sendDm(message, embed).then((msg) => {
       msg.react("◀️").then((r) => {
         msg.react("❎").then((r) => {
           msg.react("▶️");

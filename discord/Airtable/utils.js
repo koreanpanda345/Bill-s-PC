@@ -70,7 +70,9 @@ class SettingBase{
           {
             fields: {
               guildId: this.data.guildId,
-              Prefix: settings.prefix
+              Prefix: settings.prefix,
+              mentions: settings.mentions,
+              dm: false,
             }
           }
         ], (err, _) => {
@@ -95,7 +97,9 @@ class SettingBase{
     })
     return result;
   }
-
+  /**
+   * @returns {{record_id: string, prefix: string, mentions: Boolean, dm: Boolean}}
+   */
   getGuildSettings = async() => {
     let data = await new Promise((resolve, reject) => {
       this.base.select({
@@ -104,14 +108,20 @@ class SettingBase{
         records.forEach((record) => {
           resolve({
             record_id: record.getId(),
-            prefix: record.get('Prefix')
+            prefix: record.get('Prefix'),
+            mentions: record.get('mentions'),
+            dm: record.get('dm')
           })
         })
       })
     })
     return data;
   }
-
+  /**
+   * 
+   * @param {{prefix: string, mentions: Boolean, dm: Boolean}} newData 
+   * @returns {{success: Boolean, reason?: string, data?: {prefix: string, mentions: Boolean, dm: Boolean}}}
+   */
   editSettings = async(newData) => {
     let data = await new Promise(async(resolve, reject) => {
       let check = await this.CheckIFGuildSettingsExist(this.data.guildId);
@@ -129,7 +139,9 @@ class SettingBase{
         {
           id: _data.record_id,
           fields: {
-            Prefix: newData.prefix
+            Prefix: newData.prefix,
+            mentions: newData.mentions,
+            dm: newData.dm
           }
         }
       ], (err, _) => {
