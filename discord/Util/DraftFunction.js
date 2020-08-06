@@ -17,7 +17,7 @@ module.exports = {
    * @returns {{success: Boolean, reason?: string, data: string[]}}
    */
   async checkIfPokemonHasClericMoves(name) {
-    name = name.replace("-mega", "");
+    name = name.toLowerCase().replace("-mega", "");
     let learnset = await ps.getLearnset(name);
     let obj = [];
     if(!learnset.success) return {success: false, reason: learnset.reason};
@@ -41,7 +41,7 @@ module.exports = {
    * @return {{success: Boolean, reason?: string, data: string[]}}
    */
   async checkIFPokemonHasPivotMoves(name) {
-    name = name.replace("-mega", "");
+    name = name.toLowerCase().replace("-mega", "");
     let obj = [];
     let learnset = await ps.getLearnset(name);
     if(!learnset.success) return {success: false, reason: learnset.reason};
@@ -67,7 +67,7 @@ module.exports = {
    * @return {{success: Boolean, reason?: string, data: string[]}}
    */
   async checkIfPokemonHasHazardsMoves(name) {
-    name = name.replace("-mega", "");
+    name = name.toLowerCase().replace("-mega", "");
     let obj = [];
     let learnset = await ps.getLearnset(name);
     if(!learnset.success) return {success: false, reason: learnset.reason};
@@ -87,7 +87,7 @@ module.exports = {
    * @return {{success: Boolean, reason?: string, data: string[]}}
    */
   async checkIfPokemonHasHazardRemovalMoves(name) {
-    name = name.replace("-mega", "");
+    name = name.toLowerCase().replace("-mega", "");
     let obj = [];
     let learnset = await ps.getLearnset(name);
     if(!learnset.success) return {success: false, reason: learnset.reason};

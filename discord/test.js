@@ -1,6 +1,6 @@
-const dmg = require('./DevTools/Testing/damagecalc');
+const {getInfoOnOpponentTeam} = require('./Util/Teambuilder');
 module.exports = {
-  damage: async () => {
-    dmg();
-  }
+    async Teambuilder() {
+        await getInfoOnOpponentTeam(["Lopunny", "Cinccino", "Milotic", "Morpeko", "Drapion", "Ditto"]);
+    }
 }

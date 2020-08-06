@@ -95,8 +95,8 @@ module.exports = {
                   userId: message.author.id,
                 };
                 let plan = "";
-                for (let i = 0; i < embed.fields.length; i++) {
-                  plan += `${embed.fields[i].name}</> ${embed.fields[i].value}<>`;
+                for (let i = 0; i < draft.slots.length; i++) {
+                  plan += `${draft.slots[i].name}</> ${draft.slots[i].value}<>`;
                 }
                 //console.log(plan);
                 let result = await db.draft.editDraftPlan(num, {plan: plan});

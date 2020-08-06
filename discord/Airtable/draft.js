@@ -175,6 +175,7 @@ module.exports = class Draft {
       if(isNaN(select)) return resolve({reason: "Sorry, but that id is not a number, please try again.", success: false});
       let arr = await this.convertDraftsIntoArray(drafts);
       if(select > arr.names.length) return resolve({reason: "Sorry, but it doesn't look like you have a draft with that id."});
+      select--;
       arr.plans[select] = newData.plan;
       this.base.update(
         [

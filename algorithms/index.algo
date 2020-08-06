@@ -1,0 +1,20 @@
+ALGORITHM index
+VAR
+    test_mode := BOOLEAN
+BEGIN
+    client := Client
+    collection : ARRAY_OF STRING[1];
+    FOR x FROM 0 TO collection.length STEP 1  DO
+        client[x] := Collection
+    END_FOR
+    handler : ARRAY_OF STRING[2];
+    FOR x FROM 0 TO handler.length STEP 1  DO
+        require "./handler/" + x and Pass in client
+    END_FOR
+    
+    IF (test_mode) THEN
+        client login with test token
+    ELSE
+        client login with discord token
+    END_IF
+END

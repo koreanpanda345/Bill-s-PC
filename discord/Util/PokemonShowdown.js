@@ -1,6 +1,6 @@
 const { Sets } = require("@pkmn/sets");
-const { Generations, Generation, Types, Type } = require("@pkmn/data");
-const { Dex } = require("@pkmn/dex");
+const { Generations, Types, Type, Abilities, Specie } = require("@pkmn/data");
+const { Dex, Item} = require("@pkmn/dex");
 const axios = require("axios").default;
 const endpoint_items = process.env.SDITEMS_ENDPOINT;
 const endpoint_moves = process.env.SDMOVES_ENDPOINT;
@@ -9,8 +9,14 @@ const endpoint_ability = process.env.SDABILITY_ENDPOINT;
 const endpoint_sprites = process.env.SDSPRITES_ENDPOINT;
 const endpoint_learnset = process.env.SDLEARNSET_ENDPOINT;
 const { calculate, Pokemon, Move, Field } = require("@smogon/calc");
+
 module.exports = class PokemonShowdown {
   constructor() {}
+  /**
+   * 
+   * @param {string} name 
+   * @returns {{reason?: String, data?: Item, success: Boolean}}
+   */
   itemDex = async (name) => {
     let item = Dex.getItem(name);
     if (item.num === 0) {
@@ -30,6 +36,11 @@ module.exports = class PokemonShowdown {
     }
     return { data: item, success: true };
   };
+  /**
+   * 
+   * @param {string} name 
+   * @returns {{reason?: String, data?: Move, success: Boolean}}
+   */
   moveDex = async (name) => {
     let move = Dex.getMove(name);
     if (move.num === 0) {
@@ -49,6 +60,11 @@ module.exports = class PokemonShowdown {
     }
     return { data: move, success: true };
   };
+  /**
+   * 
+   * @param {string} name 
+   * @returns {{reason?: String, data?: Abilities, success: Boolean}}
+   */
   abilityDex = async (name) => {
     let ability = Dex.getAbility(name);
     if (ability.num === 0) {
@@ -67,7 +83,11 @@ module.exports = class PokemonShowdown {
     }
     return { data: ability, success: true };
   };
-
+  /**
+   * 
+   * @param {string} name
+   * @returns {{reason?: String, data?: Specie, success: Boolean}} 
+   */
   pokemonDex = async (name) => {
     name = name.replace(" ", "");
     console.log(name);
@@ -92,6 +112,7 @@ module.exports = class PokemonShowdown {
   /**
    *
    * @param {string} name
+   * @returns {String}
    */
   pokemonSprites = async (name) => {
     name = name.toLowerCase();
@@ -107,7 +128,6 @@ module.exports = class PokemonShowdown {
     let learnset = gen.get(8).species.get(name) == undefined 
     ? gen.get(7).learnsets.get(name) 
     : gen.get(8).learnsets.get(name);
-    console.log((await learnset).learnset);
     if(learnset == undefined) {
       let data = await new Promise((resolve, reject) => {
         axios.get(endpoint_learnset).then((res) => {

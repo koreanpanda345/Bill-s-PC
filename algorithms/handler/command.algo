@@ -1,0 +1,19 @@
+ALGORITHM command_handler
+VAR
+    client := Client
+BEGIN
+    FUNCTION load(dirs : STRING) : VOID
+    VAR
+        commands : ARRAY_OF STRING[] ;
+    BEGIN
+        search in the command directory, and filter for files with ".js" in their name
+        FOR file FROM 0 TO commands.length STEP 1  DO
+            cmd := require "../commands" + dirs + "/" + file ;
+            client.commands set cmd to cmd.name
+            PRINT "Commands -> " dirs "] " cmd.name " was loaded"
+        END_FOR
+    END
+    FOR dir FROM 0 TO dirs : ARRAY_OF STRING[] STEP 1  DO
+        load(dir) ;
+    END_FOR
+END
